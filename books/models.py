@@ -4,7 +4,7 @@ from core.constrains import way, USERS, USER, COPY, AUTHOR, AUTHORS, BOOK, BOOKS
 class Book(models.Model):
     image = models.TextField(default="https://i.postimg.cc/J7H4ryhJ/51s-Is-L2-Hpp-L-SX337-BO1-204-203-200-cleanup.png")
     name = models.CharField(max_length=120)
-    series = models.CharField(max_length=120)
+    series = models.CharField(max_length=120, null=True, default=None)
     genre = models.CharField(max_length=120, null=True, default=None)
     about = models.TextField()
     year = models.DateField()
