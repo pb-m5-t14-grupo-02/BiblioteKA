@@ -1,5 +1,5 @@
 from django.db import models
-from core.constrains import way, USERS, USER
+from core.constrains import way, USERS, USER, COPY, AUTHOR, AUTHORS, BOOK, BOOKS
 
 class Book(models.Model):
     image = models.TextField(default="https://i.postimg.cc/J7H4ryhJ/51s-Is-L2-Hpp-L-SX337-BO1-204-203-200-cleanup.png")
@@ -16,7 +16,7 @@ class Book(models.Model):
         related_name="book"
     )
     author = models.ForeignKey(
-        "authors.Author",
+        way(AUTHORS, AUTHOR),
         on_delete=models.CASCADE,
         related_name="books"
     )
@@ -27,7 +27,7 @@ class BookLoan(models.Model):
         on_delete=models.CASCADE,
     )
     copy = models.ForeignKey(
-        "books.Copy",
+        way(BOOKS, COPY),
         on_delete=models.CASCADE,
     )
     load_date = models.DateTimeField(auto_now_add=True)
@@ -36,7 +36,7 @@ class BookLoan(models.Model):
 
 class Copy(models.Model):
     book = models.ForeignKey(
-        "books.Book",
+        way(BOOKS, BOOK),
         on_delete=models.CASCADE,
         related_name="copies"
     )
