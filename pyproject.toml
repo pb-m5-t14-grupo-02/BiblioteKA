@@ -1,0 +1,27 @@
+[tool.poetry]
+name = "biblioteka"
+version = "0.1.0"
+description = ""
+authors = ["matheucdd, leomitas, alves-leandro, PauloHenriqueTCastro"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+whitenoise = {extras = ["brotli"], version = "^6.4.0"}
+djangorestframework = "^3.14.0"
+djangorestframework-simplejwt = "^5.2.2"
+python-dotenv = "^1.0.0"
+psycopg2-binary = "^2.9.6"
+drf-spectacular = "^0.26.2"
+gunicorn = "^20.1.0"
+dj-database-url = "^2.0.0"
+
+
+[tool.poetry.group.dev.dependencies]
+ipdb = "^0.13.13"
+black = "^23.3.0"
+pycodestyle = "^2.10.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

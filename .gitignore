@@ -1,0 +1,11 @@
+__pycache__
+.pytest_cache
+.idea
+.env
+.vscode
+poetry.lock
+*.lock
+*.sqlite3
+sqlitestudio.desktop.save
+db.sqlite3
+poetry.lock
