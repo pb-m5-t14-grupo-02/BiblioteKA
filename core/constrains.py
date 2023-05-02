@@ -1,6 +1,6 @@
 NAME = "name"
 IMAGE = "image"
-GENDER = "gender"
+GENRE = "genre"
 ABOUT = "about"
 YEAR = "year"
 COPIES = "copies"
