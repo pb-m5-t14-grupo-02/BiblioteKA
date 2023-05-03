@@ -16,9 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from .constrains import way, URLS, USERS
-
-from .constrains import way, AUTHORS, URLS
+from .constrains import way, URLS, USERS, AUTHORS
 
 urlpatterns = [
     path("admin/", admin.site.urls),
