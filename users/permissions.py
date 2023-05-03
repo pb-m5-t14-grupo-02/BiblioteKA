@@ -11,3 +11,8 @@ class IsAccountOwner(permissions.BasePermission):
 class IsColaborator(permissions.BasePermission):
     def has_permission(self, request, view):
         return request.user.is_authenticated and request.user.is_colaborator
+
+
+class IsSuperuser(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return request.user.is_authenticated and request.user.is_superuser

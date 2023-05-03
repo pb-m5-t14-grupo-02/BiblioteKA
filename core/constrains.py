@@ -26,6 +26,11 @@ SERIES = "series"
 POSTGRES_ = "POSTGRES_"
 FIRST_NAME = "first_name"
 LAST_NAME = "last_name"
+PASSWORD = "password"
+IS_SUPERUSER = "is_superuser"
+IS_COLABORATOR = "is_colaborator"
+IS_STUDENT = "is_student"
+VALIDATORS = "validators"
 URLS = "urls"
 
 
