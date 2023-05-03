@@ -8,4 +8,3 @@ poetry.lock
 *.sqlite3
 sqlitestudio.desktop.save
 db.sqlite3
-poetry.lock

@@ -7,13 +7,13 @@ class Book(models.Model):
     series = models.CharField(max_length=120, null=True, default=None)
     genre = models.CharField(max_length=120, null=True, default=None)
     about = models.TextField()
-    year = models.DateField()
+    year = models.IntegerField()
     copies_count = models.IntegerField()
     ISBN = models.CharField(max_length=13, null=True, default=None)
     ASIN = models.CharField(max_length=10, null=True, default=None)
-    folowing = models.ManyToManyField(
+    following = models.ManyToManyField(
         way(USERS, USER),
-        related_name="book"
+        related_name="followed_books"
     )
     author = models.ForeignKey(
         way(AUTHORS, AUTHOR),
