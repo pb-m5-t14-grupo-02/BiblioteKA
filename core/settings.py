@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
+from datetime import timedelta
 from pathlib import Path
 import os
 import dotenv
@@ -42,15 +43,9 @@ DJANGO_APPS = [
     "django.contrib.staticfiles",
 ]
 
-THIRD_PARTY_APPS = [
-    "rest_framework"
-]
+THIRD_PARTY_APPS = ["rest_framework"]
 
-MY_APPS = [
-    AUTHORS,
-    BOOKS,
-    USERS
-]
+MY_APPS = [AUTHORS, BOOKS, USERS]
 
 INSTALLED_APPS = THIRD_PARTY_APPS + MY_APPS + DJANGO_APPS
 
@@ -140,20 +135,26 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # project_base/settings.py
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
-      "rest_framework_simplejwt.authentication.JWTAuthentication",
-    )
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ),
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    "PAGE_SIZE": 5,
 }
 
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(days=7),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=14),
+}
 
 dotenv.load_dotenv()
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv(POSTGRES_+'DB'),
-        'USER': os.getenv(POSTGRES_+'USER'),
-        'PASSWORD': os.getenv(POSTGRES_+'PASSWORD'),
-        'HOST': '127.0.0.1',
-        'PORT': 5432
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.getenv(POSTGRES_ + "DB"),
+        "USER": os.getenv(POSTGRES_ + "USER"),
+        "PASSWORD": os.getenv(POSTGRES_ + "PASSWORD"),
+        "HOST": "127.0.0.1",
+        "PORT": 5432,
     }
 }
 
