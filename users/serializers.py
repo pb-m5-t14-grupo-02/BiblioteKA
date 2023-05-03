@@ -1,6 +1,14 @@
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 from .models import User
+from core.constrains import (
+    USERNAME,
+    EMAIL,
+    PASSWORD,
+    IS_SUPERUSER,
+    IS_COLABORATOR,
+    IS_STUDENT,
+)
 
 
 class UserSerializer(serializers.ModelSerializer):
