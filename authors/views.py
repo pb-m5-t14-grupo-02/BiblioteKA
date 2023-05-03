@@ -10,7 +10,7 @@ class AuthorListCreateView(ListCreateAPIView):
     # authentication_classes = [JWTAuthentication]
     # permission_classes = [classe IsStaffOrReadOnly]
 
-class AuthorSpecificView(RetrieveUpdateDestroyAPIView):
+class AuthorDetailView(RetrieveUpdateDestroyAPIView):
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
     lookup_url_kwarg = "author_id"

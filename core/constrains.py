@@ -31,3 +31,7 @@ URLS = "urls"
 
 def way(arg1: str, arg2: str) -> str:
     return arg1 + "." + arg2
+
+
+def repr_default(cls: str, pk: int, field: any) -> str:
+    return f"<{cls.capitalize()}: {field.capitalize()} [{pk}]>"
