@@ -1,0 +1,1 @@
+Olá, {{ username }}! Recebemos uma solicitação para redefinição de senha da sua conta no nosso site. Por favor, clique no link abaixo para criar uma nova senha: {{ reset_password_url }}
