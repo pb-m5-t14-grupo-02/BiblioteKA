@@ -1,1 +1,2 @@
-Olá, {{ username }}! Recebemos uma solicitação para redefinição de senha da sua conta no nosso site. Por favor, clique no link abaixo para criar uma nova senha: {{ reset_password_url }}
+Olá {current_user}, Você solicitou a redefinição da sua senha no site. Para redefinir sua senha, clique no link abaixo: {reset_password_url}
+Atenciosamente, A equipe da BiblioteKA.

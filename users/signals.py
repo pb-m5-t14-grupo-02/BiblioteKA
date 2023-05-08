@@ -16,13 +16,37 @@ def password_reset_token_created(sender, instance, reset_password_token, *args, 
             reset_password_token.key)
     }
 
-    email_html_message = render_to_string('users/email/email_message.html', context)
-    email_plaintext_message = render_to_string('users/email/email_message.txt', context)
+    # email_html_message = render_to_string('users/email/email_message.html', context)
+    email_html_message = """
+        <html>
+            <body>
+                <p>Olá {current_user},</p>
+                <p>Você solicitou a redefinição da sua senha no site.</p>
+                <p>Para redefinir sua senha, clique no link abaixo:</p>
+                <p><a href="{reset_password_url}">{reset_password_url}</a></p>
+                <p>Atenciosamente,</p>
+                <p>A equipe da BiblioteKA</p>
+            </body>
+        </html>
+    """.format(**context)
+    # email_plaintext_message = render_to_string('users/email/email_message.txt', context)
+    email_plaintext_message = """
+        Olá {current_user},
+
+        Você solicitou a redefinição da sua senha no site.
+
+        Para redefinir sua senha, clique no link abaixo:
+        {reset_password_url}
+
+        Atenciosamente,
+        A equipe da BiblioteKA
+    """.format(**context)
+
 
     msg = EmailMultiAlternatives(
         "Password Reset for {title}".format(title="Some website title"),
         email_plaintext_message,
-        "noreply@somehost.local",
+        "noreply@biblioteka.local",
         [reset_password_token.user.email]
     )
     msg.attach_alternative(email_html_message, "text/html")
