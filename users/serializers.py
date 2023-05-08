@@ -17,6 +17,7 @@ from core.constrains import (
 class UserSerializer(serializers.ModelSerializer):
     def create(self, validated_data: dict) -> User:
         user = validated_data.pop("user")
+        # arrumar essa parte depois
         # is_superuser = validated_data.pop(IS_SUPERUSER)
         # if user.is_superuser and is_superuser:
 
