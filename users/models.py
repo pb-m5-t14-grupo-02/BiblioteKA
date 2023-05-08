@@ -9,6 +9,7 @@ class User(AbstractUser):
     email = models.EmailField(unique=True)
     is_suspended = models.BooleanField(default=False)
     is_superuser = models.BooleanField(null=True, default=False)
+    img = models.FileField(u)
 
     book_loan = models.ManyToManyField(
         way(BOOKS, COPY), through=way(BOOKS, BOOK_LOAN), related_name="copies"
