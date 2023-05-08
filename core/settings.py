@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from datetime import timedelta
 from pathlib import Path
 import os
+import dj_database_url
 import dotenv
 from .constrains import POSTGRES_, AUTHORS, BOOKS, USERS, USER, way
 from django.core.management.utils import get_random_secret_key
@@ -97,6 +98,7 @@ DATABASES = {
         "NAME": BASE_DIR / "db.sqlite3",
     }
 }
+
 
 DATABASE_URL = os.getenv('DATABASE_URL')
 if DATABASE_URL:
