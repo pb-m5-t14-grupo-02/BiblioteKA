@@ -43,7 +43,10 @@ DJANGO_APPS = [
     "django.contrib.staticfiles",
 ]
 
-THIRD_PARTY_APPS = ["rest_framework"]
+THIRD_PARTY_APPS = [
+    "rest_framework",
+    "django_rest_passwordreset",
+]
 
 MY_APPS = [AUTHORS, BOOKS, USERS]
 
@@ -159,3 +162,16 @@ DATABASES = {
 }
 
 AUTH_USER_MODEL = way(USERS, USER)
+
+# DJANGO_REST_MULTITOKENAUTH_RESET_TOKEN_EXPIRY_TIME = 1
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+EMAIL_HOST = os.getenv('EMAIL_HOST')
+EMAIL_PORT = os.getenv('EMAIL_PORT')
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+
+PASSWORD_RESET_CONFIRM_URL = 'http://127.0.0.1:8000/api/reset/confirm/'
+EMAIL_FROM_USER = 'BiblioteKA <projeto.biblioteka@gmail.com>'
+EMAIL_SUBJECT_RESET = 'Redefinição de senha'

@@ -17,10 +17,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from .constrains import way, URLS, USERS, AUTHORS, BOOKS
+from django_rest_passwordreset.views import reset_password_request_token
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/", include(way(AUTHORS, URLS))),
     path("api/", include(way(USERS, URLS))),
     path("api/", include(way(BOOKS, URLS))),
+    path('api/reset/password_reset/', reset_password_request_token),
+    path('api/password_reset/', include('django_rest_passwordreset.urls', namespace='password_reset')),
 ]
