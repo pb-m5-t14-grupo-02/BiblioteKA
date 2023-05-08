@@ -92,10 +92,15 @@ WSGI_APPLICATION = "core.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.getenv(POSTGRES_ + "DB"),
+        "USER": os.getenv(POSTGRES_ + "USER"),
+        "PASSWORD": os.getenv(POSTGRES_ + "PASSWORD"),
+        "HOST": "127.0.0.1",
+        "PORT": 5432,
     }
 }
 
@@ -106,6 +111,7 @@ if DATABASE_URL:
         default=DATABASE_URL, conn_max_age=500, ssl_require=True)
     DATABASES['default'].update(db_from_env)
     DEBUG = False
+    DEBUG = True # AQUI HOMI
     
 if not DEBUG:
     # Tell Django to copy statics to the `staticfiles` directory
@@ -172,16 +178,6 @@ SIMPLE_JWT = {
 }
 
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.getenv(POSTGRES_ + "DB"),
-        "USER": os.getenv(POSTGRES_ + "USER"),
-        "PASSWORD": os.getenv(POSTGRES_ + "PASSWORD"),
-        "HOST": "127.0.0.1",
-        "PORT": 5432,
-    }
-}
 
 AUTH_USER_MODEL = way(USERS, USER)
 
