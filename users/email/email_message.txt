@@ -1,2 +1,0 @@
-Olá {current_user}, Você solicitou a redefinição da sua senha no site. Para redefinir sua senha, clique no link abaixo: {reset_password_url}
-Atenciosamente, A equipe da BiblioteKA.
