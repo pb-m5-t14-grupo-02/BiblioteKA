@@ -51,6 +51,8 @@ DJANGO_APPS = [
 THIRD_PARTY_APPS = [
     "rest_framework",
     "django_rest_passwordreset",
+    "cloudinary",
+    "cloudinary_storage"
 ]
 
 MY_APPS = [AUTHORS, BOOKS, USERS]
@@ -193,3 +195,11 @@ EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 PASSWORD_RESET_CONFIRM_URL = 'http://127.0.0.1:8000/api/reset/confirm/'
 EMAIL_FROM_USER = 'BiblioteKA <projeto.biblioteka@gmail.com>'
 EMAIL_SUBJECT_RESET = 'Redefinição de senha'
+
+
+CLOUDINARY_STORAGE = {
+  'CLOUD_NAME' : os.getenv('CLOUDINARY_CLOUD_NAME'),
+  'API_KEY' : os.getenv('CLOUDINARY_API_KEY'), 
+  'API_SECRET' : os.getenv('CLOUDINARY_API_SECRET')
+} 
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'

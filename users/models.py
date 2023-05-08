@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from core.constrains import way, BOOKS, COPY, BOOK_LOAN
+from .assets.avatar import get_random_avatar
 
 
 class User(AbstractUser):
@@ -9,6 +10,8 @@ class User(AbstractUser):
     email = models.EmailField(unique=True)
     is_suspended = models.BooleanField(default=False)
     is_superuser = models.BooleanField(null=True, default=False)
+    image = models.FileField(upload_to='users', default=get_random_avatar) 
+    
 
     book_loan = models.ManyToManyField(
         way(BOOKS, COPY), through=way(BOOKS, BOOK_LOAN), related_name="copies"

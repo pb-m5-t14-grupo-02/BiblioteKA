@@ -15,7 +15,7 @@ import ipdb
 
 class BookView(generics.CreateAPIView):
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsColaborator or IsSuperuser]
+    permission_classes = [IsColaborator | IsSuperuser]
     queryset = Book.objects.all()
     serializer_class = BookSerializer
 
@@ -39,7 +39,7 @@ class UserBooksLoan(generics.ListAPIView):
     queryset = BookLoan.objects.all()
     serializer_class = BookLoanSerializer
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAccountOwner or IsSuperuser]
+    permission_classes = [IsAccountOwner | IsSuperuser]
     lookup_url_kwarg = "user_id"
 
     def get_queryset(self):

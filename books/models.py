@@ -10,8 +10,9 @@ class LoanDays(models.IntegerChoices):
 
 
 class Book(models.Model):
-    image = models.TextField(
-        default="https://i.postimg.cc/J7H4ryhJ/51s-Is-L2-Hpp-L-SX337-BO1-204-203-200-cleanup.png"
+    image = models.FileField(
+        upload_to="books",
+        default="https://res.cloudinary.com/dnxhcbb0u/image/upload/v1683571699/defaults/book/book_kzgg3h.png"
     )
     name = models.CharField(max_length=120)
     series = models.CharField(max_length=120, null=True, default=None)
