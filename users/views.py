@@ -21,12 +21,12 @@ class UserListView(generics.ListAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsColaborator or IsSuperuser]
+    permission_classes = [IsColaborator | IsSuperuser]
 
 
 class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAccountOwner or IsSuperuser]
+    permission_classes = [IsAccountOwner | IsSuperuser]
     lookup_url_kwarg = "user_id"

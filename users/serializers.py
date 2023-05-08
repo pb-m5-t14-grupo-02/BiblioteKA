@@ -11,6 +11,7 @@ from core.constrains import (
     IS_STUDENT,
     WRITE_ONLY,
     VALIDATORS,
+    IMAGE
 )
 
 
@@ -44,6 +45,7 @@ class UserSerializer(serializers.ModelSerializer):
             ID,
             USERNAME,
             EMAIL,
+            IMAGE,
             PASSWORD,
             IS_STUDENT,
             IS_COLABORATOR,
