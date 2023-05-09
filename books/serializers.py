@@ -26,10 +26,6 @@ class BookSerializer(serializers.ModelSerializer):
     copies_count = serializers.IntegerField(write_only=True)
 
     def create(self, validated_data: dict):
-        # from ipdb import set_trace
-        # set_trace()
-
-
         copies_counts = validated_data.pop(COPIES_COUNT)
         create_book = Book.objects.create(**validated_data)
         for i in range(copies_counts):
@@ -49,8 +45,7 @@ class BookSerializer(serializers.ModelSerializer):
             ISBN,
             ASIN,
             COPIES_COUNT,
-            DAYS,
-            "author",
+            DAYS
         ]
         extra_kwargs = {COPIES_COUNT: WRITE_ONLY}
         depth = 1
