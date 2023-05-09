@@ -45,7 +45,8 @@ class BookSerializer(serializers.ModelSerializer):
             ISBN,
             ASIN,
             COPIES_COUNT,
-            DAYS
+            DAYS,
+            "author"
         ]
         extra_kwargs = {COPIES_COUNT: WRITE_ONLY}
         depth = 1
