@@ -72,6 +72,7 @@ class BookFollowingSerializer(serializers.ModelSerializer):
 class BookLoanSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         days = validated_data.pop("days")
+        due_date = validated_data.pop("due_date")
         initial_date = datetime.datetime.now()
         end_date = initial_date + datetime.timedelta(days=days)
         validated_data["return_date"] = end_date.date()
