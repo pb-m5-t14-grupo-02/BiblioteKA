@@ -9,6 +9,17 @@ class LoanDays(models.IntegerChoices):
     month = 30
 
 
+class BookFollowing(models.Model):
+    user = models.ForeignKey(
+        way(USERS, USER),
+        on_delete=models.CASCADE,
+    )
+    book = models.ForeignKey(
+        way(BOOKS, BOOK),
+        on_delete=models.CASCADE,
+    )
+    
+
 class Book(models.Model):
     image = models.FileField(
         upload_to="books",
@@ -22,7 +33,7 @@ class Book(models.Model):
     days = models.IntegerField(default=LoanDays.week, choices=LoanDays.choices)
     ISBN = models.CharField(max_length=13, null=True, default=None)
     ASIN = models.CharField(max_length=10, null=True, default=None)
-    following = models.ManyToManyField(way(USERS, USER), related_name="followed_books")
+    following = models.ManyToManyField(way(USERS, USER), related_name="followed_books", through=BookFollowing)
     author = models.ForeignKey(
         way(AUTHORS, AUTHOR), on_delete=models.CASCADE, related_name="books"
     )

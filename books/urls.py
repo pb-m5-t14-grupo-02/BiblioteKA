@@ -4,7 +4,7 @@ from rest_framework_simplejwt import views as jwt_views
 
 urlpatterns = [
     path("books/", views.BookView.as_view()),
-    path("books/following/", views.BookFollowingView.as_view()),
+    path("books/following/<int:book_id>/", views.BookFollowingView.as_view()),
     path("books/<int:book_id>/", views.BookDetailView.as_view()),
     path("books/loan/<int:book_id>/", views.BookLoanView.as_view()),
     path("users/loan/<int:user_id>/", views.UserBooksLoan.as_view()),

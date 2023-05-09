@@ -1,13 +1,14 @@
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework import generics
-from .models import Book, BookLoan, Copy
-from .serializers import BookSerializer, BookLoanSerializer
+from .models import Book, BookLoan, Copy, BookFollowing
+from .serializers import BookSerializer, BookLoanSerializer, BookFollowingSerializer
 from rest_framework.permissions import IsAuthenticated
 from users.permissions import IsColaborator, IsSuperuser, IsAccountOwner, ReadOnly
 from .permissions import IsSuspended
 from users.models import User
 from django.shortcuts import get_object_or_404, get_list_or_404
 from authors.models import Author
+from rest_framework.views import Response, status
 
 
 class BookView(generics.ListCreateAPIView):
@@ -16,10 +17,11 @@ class BookView(generics.ListCreateAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
 
-    # def perform_create(self, serializer):
-    #     author_id = self.request.data.get("author")
-    #     author = get_object_or_404(Author, id=author_id)
-    #     serializer.save(author=author)
+    def perform_create(self, serializer):
+        # TODO: ver se existe um modo mais fácil
+        author_id = self.request.data.get("author")
+        author = get_object_or_404(Author, id=author_id)
+        serializer.save(author=author)
 
 
 class BookDetailView(generics.RetrieveUpdateDestroyAPIView):
@@ -30,11 +32,26 @@ class BookDetailView(generics.RetrieveUpdateDestroyAPIView):
     lookup_url_kwarg = "book_id"
 
 
-class BookFollowingView(generics.CreateAPIView):
+class BookFollowingView(generics.ListCreateAPIView):
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsColaborator | IsSuperuser]
-    queryset = Book.objects.all()
-    serializer_class = BookSerializer
+    permission_classes = [IsAuthenticated]
+    queryset = BookFollowing.objects.all()
+    serializer_class = BookFollowingSerializer
+
+    def post(self, request, *args, **kwargs):
+        book = get_object_or_404(Book, id=self.kwargs["book_id"])
+        book_following = BookFollowing.objects.filter(book=book, user=self.request.user).first()
+        if book_following:
+            return Response({"message": "You already follow this book"} ,status=status.HTTP_409_CONFLICT)
+        return super().post(request, *args, **kwargs)
+
+    def perform_create(self, serializer):        
+        book = get_object_or_404(Book, id=self.kwargs["book_id"])
+        serializer.save(book=book, user=self.request.user)
+    
+    def get_queryset(self):
+        get_object_or_404(BookFollowing, id=self.kwargs["book_id"])
+        return BookFollowing.objects.filter(user=self.request.user)
 
 
 class BookDetailView(generics.ListAPIView):
