@@ -13,7 +13,7 @@ from core.constrains import (
 )
 
 
-class TestClassUser(TestCase):
+class TestModelUser(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.adm_data = create_user_data("Adminstrator", "admin", is_superuser=True)
@@ -27,19 +27,32 @@ class TestClassUser(TestCase):
 
     def test_user_adm_fields(self):
         """Testing if all model fields are correctly added to database"""
+        self.validate_fields(self.adm_instance, self.adm_data)
+
+    def test_user_student_fields(self):
+        """Testing if all model fields are correctly added to database"""
+        self.validate_fields(self.student_instance, self.student_data)
+
+    def test_user_worker_fields(self):
+        """Testing if all model fields are correctly added to database"""
+        self.validate_fields(self.worker_instance, self.worker_data)
+
+    def validate_fields(self, instance, data):
         fields = [USERNAME, EMAIL, IS_SUPERUSER, IS_COLABORATOR, IS_STUDENT]
         for field in fields:
-            result = getattr(self.adm_instance, field)
-            expected = self.adm_data[field]
+            result = getattr(instance, field)
+            expected = data[field]
             msg = f'Checking if {field} is the same'
             self.assertEqual(result, expected, msg)
 
-        result = self.adm_instance.password
-        expected = self.adm_data[PASSWORD]
+        result = instance.password
+        expected = data[PASSWORD]
         msg = 'Checking if password is hashed'
         self.assertNotEqual(result, expected, msg)
 
-        result = self.adm_instance.check_password(self.adm_data[PASSWORD])
+        result = instance.check_password(data[PASSWORD])
         msg = 'Checking if the password is hashed correctly'
         self.assertTrue(result, msg)
-        
+
+
+
