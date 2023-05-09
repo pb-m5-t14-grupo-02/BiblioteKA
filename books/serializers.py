@@ -62,7 +62,7 @@ class BookLoanSerializer(serializers.ModelSerializer):
         due_date = validated_data.pop("due_date")
         initial_date = datetime.datetime.now()
         end_date = initial_date + datetime.timedelta(days=days)
-        validated_data["return_date"] = end_date.date()
+        validated_data["return_date"] = due_date
         return BookLoan.objects.create(**validated_data)
 
     class Meta:

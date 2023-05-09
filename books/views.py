@@ -46,14 +46,18 @@ class BookLoanView(generics.CreateAPIView):
         copy = get_list_or_404(Copy, book=book, is_avaliable=True)[0]
         copy.is_avaliable = False
         copy.save()
-        
+
         # Adicionando a data de retorno do livro emprestado
         now = timezone.now()
         due_date = now + timedelta(days=copy.book.days)
-        if due_date.weekday() in [5, 6]: # 5=sábado, 6=domingo
-            due_date += timedelta(days=7 - due_date.weekday())
-        # ipdb.set_trace()
-        serializer.save(copy=copy, user=self.request.user, days=copy.book.days, due_date=due_date)
+        if due_date.weekday() in [5, 6]:  # 5=sábado, 6=domingo
+            due_date += timedelta(days=8 - due_date.weekday())
+        serializer.save(
+            copy=copy,
+            user=self.request.user,
+            days=copy.book.days,
+            due_date=due_date.date(),
+        )
 
 
 class UserBooksLoan(generics.ListAPIView):
@@ -70,22 +74,23 @@ class UserBooksLoan(generics.ListAPIView):
 
         return BookLoan.objects.filter(user=self.request.user)
 
-    # # Verificando se a devolução está atrasada
-    # def list(self, request, *args, **kwargs):
-    #     queryset = self.get_queryset()
-    #     now = timezone.now()
-    #     for book_loan in queryset:
-    #         if not book_loan.returned and book_loan.due_date < now:
-    #             # Bloqueando o usuário que está com empréstimo atrasado
-    #             user = book_loan.user
-    #             user.is_active = False
-    #             user.save()
-    #     serializer = self.get_serializer(queryset, many=True)
-    #     return Response(serializer.data)
+    # Verificando se a devolução está atrasada e bloqueia o usuário
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        now = timezone.now()
+        for book_loan in queryset:
+            # ipdb.set_trace()
+            if not book_loan.returned and book_loan.return_date < now.date():
+                # Bloqueando o usuário que está com empréstimo atrasado
+                user = book_loan.user
+                user.is_suspended = True
+                user.save()
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
 
 class BookReturnView(generics.UpdateAPIView):
-    lookup_url_kwarg = 'book_loan_id'
+    lookup_url_kwarg = "book_loan_id"
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated, IsSuspended]
 
@@ -97,3 +102,21 @@ class BookReturnView(generics.UpdateAPIView):
         copy = book_loan.copy
         copy.is_avaliable = True
         copy.save()
+
+
+class AllBooksLoanList(generics.ListAPIView):
+    queryset = BookLoan.objects.all()
+    serializer_class = BookLoanSerializer
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsSuperuser]
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        delayed_loans = []
+        for book_loan in queryset:
+            if not book_loan.returned and (
+                book_loan.return_date < timezone.now().date()
+            ):
+                delayed_loans.append(book_loan)
+        serializer = self.get_serializer(delayed_loans, many=True)
+        return Response(serializer.data)

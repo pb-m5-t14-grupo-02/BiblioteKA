@@ -1,5 +1,16 @@
 from django.db import models
-from core.constrains import USERS, USER, COPY, AUTHOR, AUTHORS, BOOK, BOOKS, BOOK_LOAN, way, repr_default
+from core.constrains import (
+    USERS,
+    USER,
+    COPY,
+    AUTHOR,
+    AUTHORS,
+    BOOK,
+    BOOKS,
+    BOOK_LOAN,
+    way,
+    repr_default,
+)
 import datetime
 
 
@@ -12,7 +23,7 @@ class LoanDays(models.IntegerChoices):
 class Book(models.Model):
     image = models.FileField(
         upload_to="books",
-        default="https://res.cloudinary.com/dnxhcbb0u/image/upload/v1683571699/defaults/book/book_kzgg3h.png"
+        default="https://res.cloudinary.com/dnxhcbb0u/image/upload/v1683571699/defaults/book/book_kzgg3h.png",
     )
     name = models.CharField(max_length=120)
     series = models.CharField(max_length=120, null=True, default=None)
@@ -44,10 +55,15 @@ class BookLoan(models.Model):
     return_date = models.DateField(
         # default=datetime.datetime.now().date() + datetime.timedelta(days=LoanDays.week)
     )
+    returned = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
 
     def __repr__(self) -> str:
-        return repr_default(BOOK_LOAN, self.pk, f"{self.copy.book.name}({self.copy.pk}) loan by {self.user}")
+        return repr_default(
+            BOOK_LOAN,
+            self.pk,
+            f"{self.copy.book.name}({self.copy.pk}) loan by {self.user}",
+        )
 
 
 class Copy(models.Model):
