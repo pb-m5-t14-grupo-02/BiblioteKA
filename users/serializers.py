@@ -11,7 +11,8 @@ from core.constrains import (
     IS_STUDENT,
     WRITE_ONLY,
     VALIDATORS,
-    IMAGE
+    IMAGE,
+    IS_SUSPENDED
 )
 
 
@@ -47,6 +48,7 @@ class UserSerializer(serializers.ModelSerializer):
             IS_STUDENT,
             IS_COLABORATOR,
             IS_SUPERUSER,
+            IS_SUSPENDED,
         ]
 
         extra_kwargs = {
