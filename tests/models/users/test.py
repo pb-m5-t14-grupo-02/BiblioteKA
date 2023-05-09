@@ -1,6 +1,8 @@
+import ipdb
 from django.test import TestCase
 from users.models import User
-from tests.models.common import ENDPOINT_EMAIL, create_user_data
+from django.utils.crypto import get_random_string
+from tests.models.common import create_user_data
 from core.constrains import (
     IS_SUPERUSER,
     IS_COLABORATOR,
@@ -11,6 +13,7 @@ from core.constrains import (
     PASSWORD,
     USERNAME
 )
+import ipdb
 
 
 class TestModelUser(TestCase):
@@ -27,17 +30,24 @@ class TestModelUser(TestCase):
 
     def test_user_adm_fields(self):
         """Testing if all model fields are correctly added to database"""
-        self.validate_fields(self.adm_instance, self.adm_data)
+        self.validate_fields_content(self.adm_instance, self.adm_data)
 
     def test_user_student_fields(self):
         """Testing if all model fields are correctly added to database"""
-        self.validate_fields(self.student_instance, self.student_data)
+        self.validate_fields_content(self.student_instance, self.student_data)
 
     def test_user_worker_fields(self):
         """Testing if all model fields are correctly added to database"""
-        self.validate_fields(self.worker_instance, self.worker_data)
+        self.validate_fields_content(self.worker_instance, self.worker_data)
 
-    def validate_fields(self, instance, data):
+    def test_if_raise_error_when_invalid_types_fields(self):
+        """Test if raise an error when using a invalid type"""
+        invalid_user = create_user_data("1212", get_random_string(5), 1234)
+        with self.assertRaises(TypeError):
+            print(invalid_user)
+            User.objects.create_user(**invalid_user)
+
+    def validate_fields_content(self, instance, data):
         fields = [USERNAME, EMAIL, IS_SUPERUSER, IS_COLABORATOR, IS_STUDENT]
         for field in fields:
             result = getattr(instance, field)

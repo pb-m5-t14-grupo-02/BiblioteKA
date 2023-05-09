@@ -44,4 +44,4 @@ def way(arg1: str, arg2: str) -> str:
 
 
 def repr_default(cls: str, pk: int, field: any) -> str:
-    return f"<{cls.capitalize()}: {field.capitalize()} [{pk}]>"
+    return f"<{cls.capitalize()}: {field} [{pk}]>"
