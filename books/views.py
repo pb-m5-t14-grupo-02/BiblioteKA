@@ -104,7 +104,7 @@ class BookReturnView(generics.UpdateAPIView):
         copy.save()
 
 
-class AllBooksLoanList(generics.ListAPIView):
+class AllBooksLoanDelayedList(generics.ListAPIView):
     queryset = BookLoan.objects.all()
     serializer_class = BookLoanSerializer
     authentication_classes = [JWTAuthentication]
@@ -119,4 +119,29 @@ class AllBooksLoanList(generics.ListAPIView):
             ):
                 delayed_loans.append(book_loan)
         serializer = self.get_serializer(delayed_loans, many=True)
+        return Response(serializer.data)
+
+
+class AllBooksLoanList(generics.ListAPIView):
+    queryset = BookLoan.objects.all()
+    serializer_class = BookLoanSerializer
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsSuperuser]
+
+
+class AllBooksLoanOnDateList(generics.ListAPIView):
+    queryset = BookLoan.objects.all()
+    serializer_class = BookLoanSerializer
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsSuperuser]
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        ondate_loans = []
+        for book_loan in queryset:
+            if not book_loan.returned and (
+                book_loan.return_date >= timezone.now().date()
+            ):
+                ondate_loans.append(book_loan)
+        serializer = self.get_serializer(ondate_loans, many=True)
         return Response(serializer.data)

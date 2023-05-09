@@ -17,6 +17,7 @@ from core.constrains import (
     WRITE_ONLY,
     DAYS,
     COPY,
+    USER
 )
 import datetime
 import ipdb
@@ -68,5 +69,5 @@ class BookLoanSerializer(serializers.ModelSerializer):
     class Meta:
         depth = 3
         model = BookLoan
-        fields = [ID, LOAD_DATE, RETURN_DATE, IS_ACTIVE, COPY.lower()]
+        fields = [ID, LOAD_DATE, RETURN_DATE, IS_ACTIVE, COPY.lower(), USER.lower()]
         read_only_fields = [RETURN_DATE, LOAD_DATE]
