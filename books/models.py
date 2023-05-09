@@ -1,5 +1,5 @@
 from django.db import models
-from core.constrains import way, USERS, USER, COPY, AUTHOR, AUTHORS, BOOK, BOOKS
+from core.constrains import USERS, USER, COPY, AUTHOR, AUTHORS, BOOK, BOOKS, BOOK_LOAN, way, repr_default
 import datetime
 
 
@@ -27,6 +27,9 @@ class Book(models.Model):
         way(AUTHORS, AUTHOR), on_delete=models.CASCADE, related_name="books"
     )
 
+    def __repr__(self) -> str:
+        return repr_default(BOOK, self.pk, self.name)
+
 
 class BookLoan(models.Model):
     user = models.ForeignKey(
@@ -43,9 +46,15 @@ class BookLoan(models.Model):
     )
     is_active = models.BooleanField(default=True)
 
+    def __repr__(self) -> str:
+        return repr_default(BOOK_LOAN, self.pk, f"{self.copy.book.name}({self.copy.pk}) loan by {self.user}")
+
 
 class Copy(models.Model):
     book = models.ForeignKey(
         way(BOOKS, BOOK), on_delete=models.CASCADE, related_name="copies"
     )
     is_avaliable = models.BooleanField(default=True)
+
+    def __repr__(self) -> str:
+        return repr_default(COPY, self.pk, self.book.name)

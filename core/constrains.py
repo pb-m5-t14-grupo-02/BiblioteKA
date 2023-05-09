@@ -38,6 +38,7 @@ LOAD_DATE = "load_date"
 DAYS = "days"
 
 
+
 def way(arg1: str, arg2: str) -> str:
     return arg1 + "." + arg2
 
