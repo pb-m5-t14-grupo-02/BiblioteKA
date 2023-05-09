@@ -1,10 +1,8 @@
 from django.test import TestCase
 from django.db.models.fields.files import FieldFile
-from random import random
 from core.constrains import NAME, ABOUT, IMAGE
 from authors.models import Author
-from django.utils.crypto import get_random_string
-from django.core.exceptions import ValidationError
+
 
 class TestModelAuthor(TestCase):
     @classmethod
@@ -24,22 +22,24 @@ class TestModelAuthor(TestCase):
             msg = f'Checking if {field} is the same'
             self.assertEqual(result, expected, msg)
 
-    # def test_author_fields_types(self):
-    #     invalid_author {
-    #         NAME: False,
-    #         ABOUT: get_random_string(5)
-    #     }
-    #     with self.assertRaises(ValidationError):
-    #         User.objects.create_user(**invalid_user)
+    def test_fields_max_length(self):
+        """Test if the max length of this field is right"""
+        result = self.author_instance._meta.get_field(ABOUT).max_length
+        expected = None
+        self.assertEqual(result, expected)
 
-    def test_if_raise_error_when_invalid_types_fields(self):
-        """Test if raise an error when using a invalid type"""
-        invalid_author = {
-            NAME: True,
-            ABOUT: 96
-        }
-        a0 = Author.objects.create(**invalid_author)
-        print(a0)
-        # with self.assertRaises(ValidationError):
-        #     Author.objects.create(**invalid_author)
+        result = self.author_instance._meta.get_field(NAME).max_length
+        expected = 120
+        self.assertEqual(result, expected)
 
+    def test_verify_types_fields(self):
+        """Test if types of fields are correctly"""
+        string_fields = (NAME, ABOUT)
+        expected = str
+        for field in string_fields:
+            result = type(getattr(self.author_instance, field))
+            self.assertEqual(result, expected)
+
+        result = type(self.author_instance.image)
+        expected = FieldFile
+        self.assertEqual(result, expected)

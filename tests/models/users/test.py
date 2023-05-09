@@ -1,10 +1,11 @@
 from django.test import TestCase
 from django.db.models.fields.files import FieldFile
+from django.db.utils import IntegrityError
 from random import random
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 from users.models import User
-from django.utils.crypto import get_random_string
+from django.utils.crypto import get_random_string as grs
 from tests.models.common import create_user_data
 from core.constrains import (
     IS_SUPERUSER,
@@ -16,7 +17,6 @@ from core.constrains import (
     PASSWORD,
     USERNAME,
 )
-
 
 class TestModelUser(TestCase):
     @classmethod
@@ -56,16 +56,16 @@ class TestModelUser(TestCase):
 
     def test_if_raise_error_when_invalid_types_fields(self):
         """Test if raise an error when using a invalid type"""
-        invalid_user = create_user_data("invalid", get_random_string(5), random())
+        invalid_user = create_user_data("invalid", grs(5), random())
         with self.assertRaises(TypeError):
             User.objects.create_user(**invalid_user)
 
-        invalid_user[PASSWORD] = get_random_string(5)
-        invalid_user[IS_SUPERUSER] = get_random_string(5)
+        invalid_user[PASSWORD] = grs(5)
+        invalid_user[IS_SUPERUSER] = grs(5)
         with self.assertRaises(ValidationError):
             User.objects.create_user(**invalid_user)
 
-        invalid_user[IS_STUDENT] = get_random_string(5)
+        invalid_user[IS_STUDENT] = grs(5)
         with self.assertRaises(ValidationError):
             User.objects.create_user(**invalid_user)
 
@@ -75,9 +75,35 @@ class TestModelUser(TestCase):
             User.objects.create_user(**invalid_user)
 
         invalid_user[IS_COLABORATOR] = True
-        invalid_user[EMAIL] = get_random_string(5)
+        invalid_user[EMAIL] = grs(5)
         with self.assertRaises(ValidationError):
             validate_email(invalid_user[EMAIL])
+
+    def test_if_raise_error_when_email_already_in_use(self):
+        """Test if cannot create with email that is already in use"""
+        user_data = create_user_data(email=self.adm_instance.email)
+        with self.assertRaises(IntegrityError):
+            User.objects.create_user(**user_data)
+
+    def test_if_raise_error_when_username_already_in_use(self):
+        """Test if cannot create with username that is already in use"""
+        user_data = create_user_data(username=self.adm_instance.username)
+        with self.assertRaises(IntegrityError):
+            User.objects.create_user(**user_data)
+
+    def test_fields_max_length(self):
+        """Test if the max length of this fields is right"""
+        result = self.adm_instance._meta.get_field(USERNAME).max_length
+        expected = 150
+        self.assertEqual(result, expected)
+
+        result = self.adm_instance._meta.get_field(EMAIL).max_length
+        expected = 254
+        self.assertEqual(result, expected)
+
+        result = self.adm_instance._meta.get_field(PASSWORD).max_length
+        expected = 128
+        self.assertEqual(result, expected)
 
     def validate_fields_content(self, instance, data):
         fields = (USERNAME, EMAIL, IS_SUPERUSER, IS_COLABORATOR, IS_SUSPENDED, IS_STUDENT, IMAGE)
@@ -95,6 +121,8 @@ class TestModelUser(TestCase):
         result = instance.check_password(data[PASSWORD])
         msg = 'Checking if the password is hashed correctly'
         self.assertTrue(result, msg)
+
+
 
 
 
