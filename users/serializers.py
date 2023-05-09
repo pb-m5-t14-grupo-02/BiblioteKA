@@ -18,10 +18,6 @@ from core.constrains import (
 class UserSerializer(serializers.ModelSerializer):
     def create(self, validated_data: dict) -> User:
         user = validated_data.pop("user")
-        # TODO: O default True do student não está pegadno
-        # arrumar essa parte depois
-        # is_superuser = validated_data.pop(IS_SUPERUSER)
-        # if user.is_superuser and is_superuser:
 
         if user.is_superuser and validated_data['is_superuser']:
             return User.objects.create_superuser(**validated_data)

@@ -192,6 +192,7 @@ EMAIL_PORT = os.getenv("EMAIL_PORT")
 EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 
+# TODO passar pra env
 PASSWORD_RESET_CONFIRM_URL = "http://127.0.0.1:8000/api/reset/confirm/"
 EMAIL_FROM_USER = "BiblioteKA <projeto.biblioteka@gmail.com>"
 EMAIL_SUBJECT_RESET = "Redefinição de senha"
@@ -205,9 +206,13 @@ CLOUDINARY_STORAGE = {
 
 DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
 
+
 def verify_curr_branch():
     import subprocess
-    result = subprocess.run(["git", "branch", "--show-current"])
-    # output = result.stdout.decode("utf-8")
-    print(result != "main")
-verify_curr_branch()
+    result = subprocess.run(["git", "branch", "--show-current"], stdout=subprocess.PIPE)
+    output = result.stdout.decode('utf-8')
+    return "main" not in output
+
+
+if verify_curr_branch():
+    TEST_RUNNER = "redgreenunittest.django.runner.RedGreenDiscoverRunner"

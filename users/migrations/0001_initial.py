@@ -4,7 +4,7 @@ import django.contrib.auth.models
 import django.contrib.auth.validators
 from django.db import migrations, models
 import django.utils.timezone
-import users.assets.avatar
+import users.avatar
 
 
 class Migration(migrations.Migration):
@@ -92,7 +92,7 @@ class Migration(migrations.Migration):
                 (
                     "image",
                     models.FileField(
-                        default=users.assets.avatar.get_random_avatar, upload_to="users"
+                        default=users.avatar.get_random_avatar, upload_to="users"
                     ),
                 ),
                 (
