@@ -68,6 +68,7 @@ class BookLoan(models.Model):
     )
     returned = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
+    # TODO tentar remover is active
 
     def __repr__(self) -> str:
         return repr_default(

@@ -1,5 +1,8 @@
-import ipdb
 from django.test import TestCase
+from django.db.models.fields.files import FieldFile
+from random import random
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
 from users.models import User
 from django.utils.crypto import get_random_string
 from tests.models.common import create_user_data
@@ -7,13 +10,12 @@ from core.constrains import (
     IS_SUPERUSER,
     IS_COLABORATOR,
     IS_STUDENT,
-    IS_ACTIVE,
-    IMAGE,
+    IS_SUSPENDED,
     EMAIL,
+    IMAGE,
     PASSWORD,
-    USERNAME
+    USERNAME,
 )
-import ipdb
 
 
 class TestModelUser(TestCase):
@@ -28,27 +30,57 @@ class TestModelUser(TestCase):
         cls.worker_data = create_user_data("Worker", "work", is_colaborator=True)
         cls.worker_instance = User.objects.create_user(**cls.worker_data)
 
-    def test_user_adm_fields(self):
+    def test_fields_are_the_same_from_different_types_of_users(self):
         """Testing if all model fields are correctly added to database"""
         self.validate_fields_content(self.adm_instance, self.adm_data)
-
-    def test_user_student_fields(self):
-        """Testing if all model fields are correctly added to database"""
         self.validate_fields_content(self.student_instance, self.student_data)
-
-    def test_user_worker_fields(self):
-        """Testing if all model fields are correctly added to database"""
         self.validate_fields_content(self.worker_instance, self.worker_data)
+
+    def test_verify_types_fields(self):
+        """Test if types of fields are correctly"""
+        string_fields = (PASSWORD, USERNAME, EMAIL)
+        expected = str
+        for field in string_fields:
+            result = type(getattr(self.adm_instance, field))
+            self.assertEqual(result, expected)
+
+        bool_fields = (IS_SUSPENDED, IS_COLABORATOR, IS_STUDENT, IS_SUPERUSER)
+        expected = bool
+        for field in bool_fields:
+            result = type(getattr(self.adm_instance, field))
+            self.assertEqual(result, expected)
+
+        result = type(self.adm_instance.image)
+        expected = FieldFile
+        self.assertEqual(result, expected)
 
     def test_if_raise_error_when_invalid_types_fields(self):
         """Test if raise an error when using a invalid type"""
-        invalid_user = create_user_data("1212", get_random_string(5), 1234)
+        invalid_user = create_user_data("invalid", get_random_string(5), random())
         with self.assertRaises(TypeError):
-            print(invalid_user)
             User.objects.create_user(**invalid_user)
 
+        invalid_user[PASSWORD] = get_random_string(5)
+        invalid_user[IS_SUPERUSER] = get_random_string(5)
+        with self.assertRaises(ValidationError):
+            User.objects.create_user(**invalid_user)
+
+        invalid_user[IS_STUDENT] = get_random_string(5)
+        with self.assertRaises(ValidationError):
+            User.objects.create_user(**invalid_user)
+
+        invalid_user[IS_STUDENT] = True
+        invalid_user[IS_COLABORATOR] = random()
+        with self.assertRaises(ValidationError):
+            User.objects.create_user(**invalid_user)
+
+        invalid_user[IS_COLABORATOR] = True
+        invalid_user[EMAIL] = get_random_string(5)
+        with self.assertRaises(ValidationError):
+            validate_email(invalid_user[EMAIL])
+
     def validate_fields_content(self, instance, data):
-        fields = [USERNAME, EMAIL, IS_SUPERUSER, IS_COLABORATOR, IS_STUDENT]
+        fields = (USERNAME, EMAIL, IS_SUPERUSER, IS_COLABORATOR, IS_SUSPENDED, IS_STUDENT, IMAGE)
         for field in fields:
             result = getattr(instance, field)
             expected = data[field]

@@ -12,15 +12,16 @@ from core.constrains import (
     WRITE_ONLY,
     VALIDATORS,
     IMAGE,
-    IS_SUSPENDED
+    IS_SUSPENDED,
+    USER
 )
 
 
 class UserSerializer(serializers.ModelSerializer):
     def create(self, validated_data: dict) -> User:
-        user = validated_data.pop("user")
+        user = validated_data.pop(USER.lower())
 
-        if user.is_superuser and validated_data['is_superuser']:
+        if user.is_superuser and validated_data[IS_SUPERUSER]:
             return User.objects.create_superuser(**validated_data)
 
         return User.objects.create_user(**validated_data)
@@ -55,3 +56,15 @@ class UserSerializer(serializers.ModelSerializer):
             PASSWORD: WRITE_ONLY,
             EMAIL: {VALIDATORS: [UniqueValidator(queryset=User.objects.all())]},
         }
+
+
+class UserSerializerMinimum(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = [
+            ID,
+            USERNAME,
+            EMAIL,
+            IMAGE,
+            IS_SUSPENDED,
+        ]
