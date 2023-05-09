@@ -1,6 +1,7 @@
 from django.db import models
 from core.constrains import repr_default, AUTHOR
 
+
 class Author(models.Model):
     image = models.FileField(
         upload_to="authors",

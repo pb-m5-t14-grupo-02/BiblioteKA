@@ -3,21 +3,31 @@ from rest_framework import generics
 from .models import Book, BookLoan, Copy
 from .serializers import BookSerializer, BookLoanSerializer
 from rest_framework.permissions import IsAuthenticated
-from users.permissions import IsColaborator, IsSuperuser, IsAccountOwner
+from users.permissions import IsColaborator, IsSuperuser, IsAccountOwner, ReadOnly
 from .permissions import IsSuspended
-from rest_framework.response import Response
 from users.models import User
 from django.shortcuts import get_object_or_404, get_list_or_404
-import ipdb
-
-# from django.contrib.messages.views
+from authors.models import Author
 
 
-class BookView(generics.CreateAPIView):
+class BookView(generics.ListCreateAPIView):
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsColaborator | IsSuperuser]
+    permission_classes = [ReadOnly | IsColaborator | IsSuperuser]
     queryset = Book.objects.all()
     serializer_class = BookSerializer
+
+    # def perform_create(self, serializer):
+    #     author_id = self.request.data.get("author")
+    #     author = get_object_or_404(Author, id=author_id)
+    #     serializer.save(author=author)
+
+
+class BookDetailView(generics.RetrieveUpdateDestroyAPIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [ReadOnly | IsColaborator | IsSuperuser]
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+    lookup_url_kwarg = "book_id"
 
 
 class BookFollowingView(generics.CreateAPIView):
