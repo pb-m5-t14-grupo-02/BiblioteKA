@@ -20,6 +20,25 @@ class BookView(generics.CreateAPIView):
     serializer_class = BookSerializer
 
 
+class BookFollowingView(generics.CreateAPIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsColaborator | IsSuperuser]
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+
+
+class BookDetailView(generics.ListAPIView):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+    lookup_url_kwarg = "book_id"
+
+    def get_queryset(self):
+        find_book = get_object_or_404(Book, id=self.kwargs["book_id"])
+        return Book.objects.filter(id=find_book.id)
+
+
 class BookLoanView(generics.CreateAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated, IsSuspended]
