@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from .models import Book, BookLoan, Copy
+from .models import Book, BookLoan, Copy, BookFollowing
+from users.serializers import UserSerializer
 from core.constrains import (
     ID,
     IMAGE,
@@ -19,6 +20,7 @@ from core.constrains import (
     COPY,
 )
 import datetime
+from django.shortcuts import get_object_or_404
 import ipdb
 
 
@@ -50,6 +52,21 @@ class BookSerializer(serializers.ModelSerializer):
         ]
         extra_kwargs = {COPIES_COUNT: WRITE_ONLY}
         depth = 1
+
+
+class BookFollowingSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
+    book = BookSerializer(read_only=True)
+
+    def create(self, validated_data):
+        return BookFollowing.objects.create(**validated_data)
+
+    class Meta:
+        model = BookFollowing
+        fields = [
+            "user",
+            "book"
+        ]
 
 
 class BookLoanSerializer(serializers.ModelSerializer):
