@@ -16,12 +16,11 @@ class BookView(generics.ListCreateAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
 
-    # def perform_create(self, serializer):
-    #     from ipdb import set_trace
-    #     set_trace()
-    #     author_id = self.request.data.get("author")
-    #     author = get_object_or_404(Author, id=author_id)
-    #     serializer.save(author=author)
+    def perform_create(self, serializer):
+        # TODO: ver se existe um modo mais fácil
+        author_id = self.request.data.get("author")
+        author = get_object_or_404(Author, id=author_id)
+        serializer.save(author=author)
 
 
 class BookDetailView(generics.RetrieveUpdateDestroyAPIView):
