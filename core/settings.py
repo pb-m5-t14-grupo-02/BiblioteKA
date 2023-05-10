@@ -229,9 +229,6 @@ def verify_curr_branch():
 if verify_curr_branch():
     TEST_RUNNER = "redgreenunittest.django.runner.RedGreenDiscoverRunner"
 
-PASSWORD_RESET_CONFIRM_URL = 'http://127.0.0.1:8000/api/reset/confirm/'
-EMAIL_FROM_USER = 'Leonardo <sandbox.smtp.mailtrap.io>'
-EMAIL_SUBJECT_RESET = 'Redefinição de senha'
 
 CORS_ALLOWED_ORIGINS = [
 	'http://localhost:3000'
