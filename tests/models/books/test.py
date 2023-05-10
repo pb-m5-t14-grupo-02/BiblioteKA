@@ -1,10 +1,11 @@
 from django.test import TestCase
 from authors.models import Author
+from users.models import User
 from django.db.models.fields.files import FieldFile
 from django.utils.crypto import get_random_string as grs
 from books.models import Book, Copy, BookFollowing
 from core.constrains import NAME, SERIES, GENRE, ABOUT, YEAR, DAYS, ISBN, ASIN, IMAGE
-from tests.models.common import create_author_data, create_book_data
+from tests.models.common import create_author_data, create_book_data, create_user_data
 
 
 class TestModelBook(TestCase):
@@ -28,6 +29,8 @@ class TestModelBook(TestCase):
     def setUp(self) -> None:
         self.author_2 = Author.objects.create(**create_author_data())
         self.book_2 = Book.objects.create(**create_book_data(author=self.author_2))
+        self.user_1 = User.objects.create(**create_user_data())
+        self.book_2_follow = BookFollowing.objects.create(user=self.user_1, book=self.book_2)
 
     def test_books_fields_content(self):
         """Testing if all model fields are correctly added to database"""
