@@ -3,13 +3,20 @@ from rest_framework import generics
 from .models import Book, BookLoan, Copy, BookFollowing
 from .serializers import BookSerializer, BookLoanSerializer, BookFollowingSerializer
 from rest_framework.permissions import IsAuthenticated
-from users.permissions import IsColaborator, IsSuperuser, IsAccountOwner, IsStudent, ReadOnly
+from users.permissions import (
+    IsColaborator,
+    IsSuperuser,
+    IsAccountOwner,
+    IsStudent,
+    ReadOnly,
+)
 from .permissions import IsMyOwnAccountSuspended, IsStudentSuspended
 from users.models import User
 from django.shortcuts import get_object_or_404, get_list_or_404
 from datetime import timedelta, datetime
 from django.utils import timezone
 from authors.models import Author
+import ipdb
 from rest_framework.views import Response, status
 
 
@@ -41,15 +48,20 @@ class BookFollowingView(generics.ListCreateAPIView):
 
     def post(self, request, *args, **kwargs):
         book = get_object_or_404(Book, id=self.kwargs["book_id"])
-        book_following = BookFollowing.objects.filter(book=book, user=self.request.user).first()
+        book_following = BookFollowing.objects.filter(
+            book=book, user=self.request.user
+        ).first()
         if book_following:
-            return Response({"message": "You already follow this book"}, status=status.HTTP_409_CONFLICT)
+            return Response(
+                {"message": "You already follow this book"},
+                status=status.HTTP_409_CONFLICT,
+            )
         return super().post(request, *args, **kwargs)
 
-    def perform_create(self, serializer):        
+    def perform_create(self, serializer):
         book = get_object_or_404(Book, id=self.kwargs["book_id"])
         serializer.save(book=book, user=self.request.user)
-    
+
     def get_queryset(self):
         get_object_or_404(BookFollowing, id=self.kwargs["book_id"])
         return BookFollowing.objects.filter(user=self.request.user)
@@ -68,10 +80,9 @@ class BookColaboratorSelfLoanView(generics.CreateAPIView):
         copy.is_avaliable = False
         copy.save()
 
-        # Adicionando a data de retorno do livro emprestado
         now = timezone.now()
         due_date = now + timedelta(days=copy.book.days)
-        if due_date.weekday() in [5, 6]:  # 5=sábado, 6=domingo
+        if due_date.weekday() in [5, 6]:
             due_date += timedelta(days=8 - due_date.weekday())
         serializer.save(
             copy=copy,
@@ -95,10 +106,9 @@ class BookColaboratorLoanView(generics.CreateAPIView):
         copy.is_avaliable = False
         copy.save()
 
-        # Adicionando a data de retorno do livro emprestado
         now = timezone.now()
         due_date = now + timedelta(days=copy.book.days)
-        if due_date.weekday() in [5, 6]:  # 5=sábado, 6=domingo
+        if due_date.weekday() in [5, 6]:
             due_date += timedelta(days=8 - due_date.weekday())
         serializer.save(
             copy=copy,
@@ -122,13 +132,11 @@ class UserBooksLoan(generics.ListAPIView):
 
         return BookLoan.objects.filter(user=self.request.user)
 
-    # Verificando se a devolução está atrasada e bloqueia o usuário
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset()
         now = timezone.now()
         for book_loan in queryset:
             if not book_loan.returned and book_loan.return_date < now.date():
-                # Bloqueando o usuário que está com empréstimo atrasado
                 user = book_loan.user
                 user.is_suspended = True
                 user.save()
