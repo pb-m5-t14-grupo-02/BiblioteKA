@@ -192,13 +192,6 @@ REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
 
-# SPECTACULAR_SETTINGS = {
-#     "TITLE": "BiblioteKA",
-#     "DESCRIPTION": "Api desenvolvida para o gerenciamento de bibliotecas",
-#     "VERSION": "1.0.0",
-#     "SERVE_INCLUDE_SCHEMA": False,
-# }
-
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(days=7),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=14),
@@ -215,10 +208,8 @@ EMAIL_HOST = os.getenv("EMAIL_HOST")
 EMAIL_PORT = os.getenv("EMAIL_PORT")
 EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
-
-# TODO passar pra env, provavelmente vai dar pau no deploy
-PASSWORD_RESET_CONFIRM_URL = "http://127.0.0.1:8000/api/reset/confirm/"
-EMAIL_FROM_USER = "BiblioteKA <projeto.biblioteka@gmail.com>"
+PASSWORD_RESET_CONFIRM_URL = os.getenv("PASSWORD_RESET_CONFIRM_URL")
+EMAIL_FROM_USER = os.getenv("EMAIL_FROM_USER")
 EMAIL_SUBJECT_RESET = "Redefinição de senha"
 
 

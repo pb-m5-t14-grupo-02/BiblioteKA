@@ -16,7 +16,6 @@ from django.shortcuts import get_object_or_404, get_list_or_404
 from datetime import timedelta, datetime
 from django.utils import timezone
 from authors.models import Author
-import ipdb
 from rest_framework.views import Response, status
 
 
@@ -88,7 +87,7 @@ class BookColaboratorSelfLoanView(generics.CreateAPIView):
             copy=copy,
             user=self.request.user,
             days=copy.book.days,
-            due_date=due_date.date(),
+            return_date=due_date.date(),
         )
 
 
@@ -114,7 +113,7 @@ class BookColaboratorLoanView(generics.CreateAPIView):
             copy=copy,
             user=student,
             days=copy.book.days,
-            due_date=due_date.date(),
+            return_date=due_date.date(),
         )
 
 
