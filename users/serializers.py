@@ -51,7 +51,7 @@ class UserSerializer(serializers.ModelSerializer):
             IS_SUPERUSER,
             IS_SUSPENDED,
         ]
-
+        read_only_fields = [IS_SUSPENDED] # TODO: Talvez precisa trocar
         extra_kwargs = {
             PASSWORD: WRITE_ONLY,
             EMAIL: {VALIDATORS: [UniqueValidator(queryset=User.objects.all())]},

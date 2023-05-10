@@ -36,7 +36,7 @@ class TestModelUser(TestCase):
         self.validate_fields_content(self.student_instance, self.student_data)
         self.validate_fields_content(self.worker_instance, self.worker_data)
 
-    def test_verify_types_fields(self):
+    def test_verify_types_fields_content(self):
         """Test if types of fields are correctly"""
         string_fields = (PASSWORD, USERNAME, EMAIL)
         expected = str

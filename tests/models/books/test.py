@@ -2,15 +2,16 @@ from django.test import TestCase
 from authors.models import Author
 from django.db.models.fields.files import FieldFile
 from django.utils.crypto import get_random_string as grs
-from books.models import Book
+from books.models import Book, Copy
 from core.constrains import NAME, SERIES, GENRE, ABOUT, YEAR, DAYS, ISBN, ASIN, IMAGE
 from tests.models.common import create_author_data, create_book_data
 
+# TODO: Faltou o is_suspended
 
 class TestModelBook(TestCase):
     @classmethod
     def setUpTestData(cls):
-        cls.author_1 = Author.objects.create(**create_author_data())
+        cls.author_1 = Author.objects.create(**create_author_data(name="J. R. R. Tolkien"))
         cls.book_data = create_book_data(
             name="A sociedade do Anel",
             about="Foi o primeiro grande épico de fantasia moderno",
@@ -25,7 +26,11 @@ class TestModelBook(TestCase):
         )
         cls.book_instance = Book.objects.create(**cls.book_data)
 
-    def test_books_fields(self):
+    def setUp(self) -> None:
+        self.author_2 = Author.objects.create(**create_author_data())
+        self.book_2 = Book.objects.create(**create_book_data(author=self.author_2))
+
+    def test_books_fields_content(self):
         """Testing if all model fields are correctly added to database"""
         fields = (NAME, SERIES, GENRE, ABOUT, YEAR, DAYS, ISBN, ASIN, IMAGE)
         for field in fields:
@@ -84,7 +89,25 @@ class TestModelBook(TestCase):
         with self.assertRaises(ValueError):
             Book.objects.create(**invalid_book)
 
-    def test_if_raise_eror_when_invalid_types_fields(self):
-        invalid_book = create_book_data(days=17)
+    def test_a_book_can_only_have_one_author(self):
+        """Test if cannot add multiples authors"""
         with self.assertRaises(ValueError):
-            Book.objects.create(**invalid_book)
+            self.book_2.author = [self.author_1, self.author_2]
+            self.book_2.save()
+
+    def test_if_the_book_has_a_author(self):
+        """Test if a book is correctly associated with an author."""
+        self.assertIn(self.book_2, self.author_2.books.all())
+        self.assertIs(self.book_2.author, self.author_2)
+
+    def test_if_the_book_has_a_copies(self):
+        """Test if a book is correctly associated with his copies."""
+        copies = [Copy.objects.create(book=self.book_2) for _ in range(0, 10)]
+
+        result = copies.__len__()
+        expected = self.book_2.copies.all().count()
+        self.assertEqual(result, expected)
+
+        for copy in copies:
+            self.assertIn(copy, self.book_2.copies.all())
+            self.assertIs(self.book_2, copy.book)

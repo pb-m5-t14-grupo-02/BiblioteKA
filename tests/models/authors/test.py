@@ -15,7 +15,7 @@ class TestModelAuthor(TestCase):
         )
         cls.author_instance = Author.objects.create(**cls.author_data)
 
-    def test_author_fields(self):
+    def test_author_fields_content(self):
         """Testing if all model fields are correctly added to database"""
         fields = (NAME, ABOUT, IMAGE)
         for field in fields:
