@@ -46,6 +46,7 @@ DJANGO_APPS = [
 THIRD_PARTY_APPS = [
     "rest_framework",
     "django_rest_passwordreset",
+    'corsheaders',
 ]
 
 MY_APPS = [AUTHORS, BOOKS, USERS]
@@ -53,6 +54,7 @@ MY_APPS = [AUTHORS, BOOKS, USERS]
 INSTALLED_APPS = THIRD_PARTY_APPS + MY_APPS + DJANGO_APPS
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -175,3 +177,7 @@ EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 PASSWORD_RESET_CONFIRM_URL = 'http://127.0.0.1:8000/api/reset/confirm/'
 EMAIL_FROM_USER = 'Leonardo <sandbox.smtp.mailtrap.io>'
 EMAIL_SUBJECT_RESET = 'Redefinição de senha'
+
+CORS_ALLOWED_ORIGINS = [
+	'http://localhost:3000'
+]
