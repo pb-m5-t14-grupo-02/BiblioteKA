@@ -14,17 +14,16 @@ from core.constrains import (
     ASIN,
     LOAD_DATE,
     RETURN_DATE,
-    IS_ACTIVE,
     WRITE_ONLY,
     DAYS,
     COPY,
     USER,
     AUTHOR,
     BOOK,
+    RETURNED,
 )
 import datetime
 from django.shortcuts import get_object_or_404
-import ipdb
 
 
 class BookSerializer(serializers.ModelSerializer):
@@ -51,7 +50,7 @@ class BookSerializer(serializers.ModelSerializer):
             ASIN,
             COPIES_COUNT,
             DAYS,
-            AUTHOR.lower()
+            AUTHOR.lower(),
         ]
         extra_kwargs = {COPIES_COUNT: WRITE_ONLY}
         depth = 1
@@ -66,24 +65,18 @@ class BookFollowingSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = BookFollowing
-        fields = [
-            USER.lower(),
-            BOOK.lower()
-        ]
+        fields = [USER.lower(), BOOK.lower()]
 
 
 class BookLoanSerializer(serializers.ModelSerializer):
     user = UserSerializerMinimum(required=False)
 
     def create(self, validated_data):
-        # TODO: precisa disso?
         days = validated_data.pop(DAYS)
-        due_date = validated_data.pop("due_date")
-        validated_data["return_date"] = due_date
         return BookLoan.objects.create(**validated_data)
 
     class Meta:
         depth = 3
         model = BookLoan
-        fields = [ID, LOAD_DATE, RETURN_DATE, IS_ACTIVE, COPY.lower(), USER.lower()]
+        fields = [ID, LOAD_DATE, RETURN_DATE, RETURNED, COPY.lower(), USER.lower()]
         read_only_fields = [RETURN_DATE, LOAD_DATE]
