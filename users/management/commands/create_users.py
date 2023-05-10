@@ -18,7 +18,7 @@ class Command(BaseCommand):
         option = [True, False]
         for i in range(total):
             User.objects.create_user(
-                username=get_first_name().lower(),
+                username=get_first_name().lower() + grs(10),
                 email=grs(5) + "@mail.com",
                 password="1234",
                 is_student=choice(option),
