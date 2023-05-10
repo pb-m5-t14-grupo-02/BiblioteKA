@@ -1,5 +1,10 @@
-from core.constrains import IS_SUPERUSER, IS_COLABORATOR, IS_STUDENT, IS_SUSPENDED, EMAIL, PASSWORD, USERNAME, IMAGE
 from django.utils.crypto import get_random_string as grs
+from random import randint, choice
+from core.constrains import (
+    IS_SUPERUSER, IS_COLABORATOR, IS_STUDENT,  IS_SUSPENDED, EMAIL, PASSWORD, USERNAME, IMAGE, NAME,
+    SERIES, GENRE, ABOUT, YEAR, DAYS, ISBN, ASIN, AUTHOR
+)
+
 
 
 def create_user_data(
@@ -22,3 +27,46 @@ def create_user_data(
         IS_SUSPENDED: is_suspended,
         IMAGE: "https://bit.ly/41kXJ59"
     }
+
+def create_author_data(
+        name=grs(5),
+        about=grs(20),
+        image="https://bit.ly/44MGxsb"
+) -> dict:
+    return {
+        NAME: name,
+        ABOUT: about,
+        IMAGE: image
+    }
+
+
+options_loan_days = [7, 15, 30]
+def create_book_data(
+        author=None,
+        author_id=1,
+        name=grs(5),
+        series=grs(5),
+        genre=grs(5),
+        about=grs(20),
+        year=randint(1600, 2020),
+        days=choice(options_loan_days),
+        isbn=grs(13),
+        image="https://bit.ly/3McVSuJ",
+        asin=grs(10)
+) -> dict:
+    book = {
+        NAME: name,
+        SERIES: series,
+        GENRE: genre,
+        ABOUT: about,
+        YEAR: year,
+        DAYS: days,
+        ISBN: isbn,
+        ASIN: asin,
+        IMAGE: image
+    }
+    if author:
+        book[AUTHOR.lower()] = author
+    else:
+        book["author_id"] = author_id
+    return book

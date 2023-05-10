@@ -37,7 +37,7 @@ URLS = "urls"
 COPIES_COUNT = "copies_count"
 LOAD_DATE = "load_date"
 DAYS = "days"
-
+JSON_FILE = "json_file"
 
 def way(arg1: str, arg2: str) -> str:
     return arg1 + "." + arg2

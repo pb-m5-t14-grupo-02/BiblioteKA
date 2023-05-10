@@ -2,20 +2,22 @@ from django.test import TestCase
 from django.db.models.fields.files import FieldFile
 from core.constrains import NAME, ABOUT, IMAGE
 from authors.models import Author
+from tests.models.common import create_author_data
 
 
 class TestModelAuthor(TestCase):
     @classmethod
     def setUpTestData(cls):
-        cls.author_data = {
-            NAME: "Fiódor Dostoiévski",
-            ABOUT: "Foi escritor, filósofo e jornalista do Império Russo",
-            IMAGE: "https://bit.ly/3LOfjIX"
-        }
+        cls.author_data = create_author_data(
+            "Fiódor Dostoiévski",
+            "Foi escritor, filósofo e jornalista do Império Russo",
+            "https://bit.ly/3LOfjIX"
+        )
         cls.author_instance = Author.objects.create(**cls.author_data)
 
     def test_author_fields(self):
-        fields = [NAME, ABOUT, IMAGE]
+        """Testing if all model fields are correctly added to database"""
+        fields = (NAME, ABOUT, IMAGE)
         for field in fields:
             result = getattr(self.author_instance, field)
             expected = self.author_data[field]
