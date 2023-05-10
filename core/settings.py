@@ -52,12 +52,41 @@ THIRD_PARTY_APPS = [
     "rest_framework",
     "django_rest_passwordreset",
     "cloudinary",
-    "cloudinary_storage"
+    "cloudinary_storage",
+    "django_apscheduler",
 ]
 
 MY_APPS = [AUTHORS, BOOKS, USERS]
 
 INSTALLED_APPS = THIRD_PARTY_APPS + MY_APPS + DJANGO_APPS
+
+SCHEDULER_AUTOSTART = True
+SCHEDULER_RUN_AT_STARTUP = True
+SCHEDULER_SETTINGS = {
+    "apscheduler.executors.default": {
+        "class": "apscheduler.executors.pool:ThreadPoolExecutor",
+        "max_workers": "20",
+    },
+    "apscheduler.jobstores.default": {
+        "class": "apscheduler.jobstores.django:DjangoJobStore"
+    },
+}
+
+# APSCHEDULER_JOBSTORES = {
+#     "default": {
+#         "TYPE": "django_apscheduler.jobstores:DjangoJobStore"
+#     }
+# }
+# APSCHEDULER_EXECUTORS = {
+#     "default": {
+#         "CLASS": "apscheduler.executors.pool:ThreadPoolExecutor",
+#         "MAX_WORKERS": 20,
+#     },
+# }
+# APSCHEDULER_JOB_DEFAULTS = {
+#     "coalesce": False,
+#     "max_instances": 3,
+# }
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -110,11 +139,12 @@ DATABASES = {
 DATABASE_URL = os.getenv("DATABASE_URL")
 if DATABASE_URL:
     db_from_env = dj_database_url.config(
-        default=DATABASE_URL, conn_max_age=500, ssl_require=True)
+        default=DATABASE_URL, conn_max_age=500, ssl_require=True
+    )
     DATABASES["default"].update(db_from_env)
     DEBUG = False
 
-    
+
 if not DEBUG:
     # Tell Django to copy statics to the `staticfiles` directory
     # in your application directory on Render.
@@ -180,7 +210,6 @@ SIMPLE_JWT = {
 }
 
 
-
 AUTH_USER_MODEL = way(USERS, USER)
 
 # DJANGO_REST_MULTITOKENAUTH_RESET_TOKEN_EXPIRY_TIME = 1
@@ -199,18 +228,19 @@ EMAIL_SUBJECT_RESET = "Redefinição de senha"
 
 
 CLOUDINARY_STORAGE = {
-  "CLOUD_NAME" : os.getenv("CLOUDINARY_CLOUD_NAME"),
-  "API_KEY" : os.getenv("CLOUDINARY_API_KEY"), 
-  "API_SECRET" : os.getenv("CLOUDINARY_API_SECRET")
-} 
+    "CLOUD_NAME": os.getenv("CLOUDINARY_CLOUD_NAME"),
+    "API_KEY": os.getenv("CLOUDINARY_API_KEY"),
+    "API_SECRET": os.getenv("CLOUDINARY_API_SECRET"),
+}
 
 DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
 
 
 def verify_curr_branch():
     import subprocess
+
     result = subprocess.run(["git", "branch", "--show-current"], stdout=subprocess.PIPE)
-    output = result.stdout.decode('utf-8')
+    output = result.stdout.decode("utf-8")
     return "main" not in output
 
 
