@@ -70,9 +70,7 @@ class BookLoan(models.Model):
     load_date = models.DateField(auto_now_add=True)
     return_date = models.DateField()
     returned = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=True)
-    # TODO tentar remover is active
-
+    
     def __repr__(self) -> str:
         return repr_default(
             BOOK_LOAN,
