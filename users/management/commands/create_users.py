@@ -24,5 +24,5 @@ class Command(BaseCommand):
                 is_student=choice(option),
                 is_colaborator=choice(option)
             )
-        print("\033[35mUsers created ¯\_(ツ)_/¯")
+        print("\033[35mUsers created ,D")
 

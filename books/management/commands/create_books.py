@@ -25,4 +25,4 @@ class Command(BaseCommand):
             if len(author[BOOKS]):
                 for book in author[BOOKS]:
                     Book.objects.create(**book, author=curr_author)
-        print("\033[32mFinish create books and authors ≧◠‿◠≦")
+        print("\033[32mFinish create books and authors :)")
