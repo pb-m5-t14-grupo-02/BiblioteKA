@@ -51,9 +51,11 @@ DJANGO_APPS = [
 THIRD_PARTY_APPS = [
     "rest_framework",
     "django_rest_passwordreset",
+    'corsheaders',
     "cloudinary",
     "cloudinary_storage",
     "django_apscheduler",
+    "drf_spectacular",
 ]
 
 MY_APPS = [AUTHORS, BOOKS, USERS]
@@ -89,6 +91,7 @@ SCHEDULER_SETTINGS = {
 # }
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -202,7 +205,15 @@ REST_FRAMEWORK = {
     ),
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "PAGE_SIZE": 5,
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
+
+# SPECTACULAR_SETTINGS = {
+#     "TITLE": "BiblioteKA",
+#     "DESCRIPTION": "Api desenvolvida para o gerenciamento de bibliotecas",
+#     "VERSION": "1.0.0",
+#     "SERVE_INCLUDE_SCHEMA": False,
+# }
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(days=7),
@@ -221,7 +232,7 @@ EMAIL_PORT = os.getenv("EMAIL_PORT")
 EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 
-# TODO passar pra env
+# TODO passar pra env, provavelmente vai dar pau no deploy
 PASSWORD_RESET_CONFIRM_URL = "http://127.0.0.1:8000/api/reset/confirm/"
 EMAIL_FROM_USER = "BiblioteKA <projeto.biblioteka@gmail.com>"
 EMAIL_SUBJECT_RESET = "Redefinição de senha"
@@ -246,3 +257,8 @@ def verify_curr_branch():
 
 if verify_curr_branch():
     TEST_RUNNER = "redgreenunittest.django.runner.RedGreenDiscoverRunner"
+
+
+CORS_ALLOWED_ORIGINS = [
+	'http://localhost:3000'
+]

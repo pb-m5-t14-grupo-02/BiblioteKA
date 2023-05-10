@@ -20,9 +20,21 @@ class LoanDays(models.IntegerChoices):
     month = 30
 
 
+class BookFollowing(models.Model):
+    user = models.ForeignKey(
+        way(USERS, USER),
+        on_delete=models.CASCADE,
+    )
+    book = models.ForeignKey(
+        way(BOOKS, BOOK),
+        on_delete=models.CASCADE,
+    )
+    
+
 class Book(models.Model):
     image = models.FileField(
         upload_to="books",
+        max_length=1000,
         default="https://res.cloudinary.com/dnxhcbb0u/image/upload/v1683571699/defaults/book/book_kzgg3h.png",
     )
     name = models.CharField(max_length=120)
@@ -33,7 +45,7 @@ class Book(models.Model):
     days = models.IntegerField(default=LoanDays.week, choices=LoanDays.choices)
     ISBN = models.CharField(max_length=13, null=True, default=None)
     ASIN = models.CharField(max_length=10, null=True, default=None)
-    following = models.ManyToManyField(way(USERS, USER), related_name="followed_books")
+    following = models.ManyToManyField(way(USERS, USER), related_name="followed_books", through=BookFollowing)
     author = models.ForeignKey(
         way(AUTHORS, AUTHOR), on_delete=models.CASCADE, related_name="books"
     )
@@ -57,6 +69,7 @@ class BookLoan(models.Model):
     )
     returned = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
+    # TODO tentar remover is active
 
     def __repr__(self) -> str:
         return repr_default(

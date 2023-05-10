@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from .models import Book, BookLoan, Copy
+from .models import Book, BookLoan, Copy, BookFollowing
+from users.serializers import UserSerializer, UserSerializerMinimum
 from core.constrains import (
     ID,
     IMAGE,
@@ -17,9 +18,12 @@ from core.constrains import (
     WRITE_ONLY,
     DAYS,
     COPY,
-    USER
+    USER,
+    AUTHOR,
+    BOOK,
 )
 import datetime
+from django.shortcuts import get_object_or_404
 import ipdb
 
 
@@ -27,10 +31,6 @@ class BookSerializer(serializers.ModelSerializer):
     copies_count = serializers.IntegerField(write_only=True)
 
     def create(self, validated_data: dict):
-        # from ipdb import set_trace
-        # set_trace()
-
-
         copies_counts = validated_data.pop(COPIES_COUNT)
         create_book = Book.objects.create(**validated_data)
         for i in range(copies_counts):
@@ -51,15 +51,32 @@ class BookSerializer(serializers.ModelSerializer):
             ASIN,
             COPIES_COUNT,
             DAYS,
-            "author",
+            AUTHOR.lower()
         ]
         extra_kwargs = {COPIES_COUNT: WRITE_ONLY}
         depth = 1
 
 
-class BookLoanSerializer(serializers.ModelSerializer):
+class BookFollowingSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
+    book = BookSerializer(read_only=True)
+
     def create(self, validated_data):
-        days = validated_data.pop("days")
+        return BookFollowing.objects.create(**validated_data)
+
+    class Meta:
+        model = BookFollowing
+        fields = [
+            USER.lower(),
+            BOOK.lower()
+        ]
+
+
+class BookLoanSerializer(serializers.ModelSerializer):
+    user = UserSerializerMinimum(required=False)
+
+    def create(self, validated_data):
+        days = validated_data.pop(DAYS)
         due_date = validated_data.pop("due_date")
         initial_date = datetime.datetime.now()
         end_date = initial_date + datetime.timedelta(days=days)

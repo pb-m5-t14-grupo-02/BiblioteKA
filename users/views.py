@@ -30,3 +30,6 @@ class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAccountOwner | IsSuperuser]
     lookup_url_kwarg = "user_id"
+
+    def perform_update(self, serializer):
+        serializer.save(is_admin=self.request.user.is_superuser)
