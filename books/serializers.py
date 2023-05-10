@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from .models import Book, BookLoan, Copy
+from .models import Book, BookLoan, Copy, BookFollowing
+from users.serializers import UserSerializer, UserSerializerMinimum
 from core.constrains import (
     ID,
     IMAGE,
@@ -13,13 +14,15 @@ from core.constrains import (
     ASIN,
     LOAD_DATE,
     RETURN_DATE,
-    IS_ACTIVE,
     WRITE_ONLY,
     DAYS,
     COPY,
+    USER,
+    AUTHOR,
+    BOOK,
+    RETURNED,
 )
-import datetime
-import ipdb
+
 
 
 class BookSerializer(serializers.ModelSerializer):
@@ -46,21 +49,33 @@ class BookSerializer(serializers.ModelSerializer):
             ASIN,
             COPIES_COUNT,
             DAYS,
-            "author",
+            AUTHOR.lower(),
         ]
         extra_kwargs = {COPIES_COUNT: WRITE_ONLY}
+        depth = 1
+
+
+class BookFollowingSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
+    book = BookSerializer(read_only=True)
+
+    def create(self, validated_data):
+        return BookFollowing.objects.create(**validated_data)
+
+    class Meta:
+        model = BookFollowing
+        fields = [USER.lower(), BOOK.lower()]
 
 
 class BookLoanSerializer(serializers.ModelSerializer):
+    user = UserSerializerMinimum(required=False)
+
     def create(self, validated_data):
-        days = validated_data.pop("days")
-        initial_date = datetime.datetime.now()
-        end_date = initial_date + datetime.timedelta(days=days)
-        validated_data["return_date"] = end_date.date()
+        days = validated_data.pop(DAYS)
         return BookLoan.objects.create(**validated_data)
 
     class Meta:
         depth = 3
         model = BookLoan
-        fields = [ID, LOAD_DATE, RETURN_DATE, IS_ACTIVE, COPY.lower()]
+        fields = [ID, LOAD_DATE, RETURN_DATE, RETURNED, COPY.lower(), USER.lower()]
         read_only_fields = [RETURN_DATE, LOAD_DATE]

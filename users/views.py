@@ -3,8 +3,6 @@ from rest_framework import generics
 from .models import User
 from .serializers import UserSerializer
 from .permissions import IsAccountOwner, IsColaborator, IsSuperuser
-from books.models import BookLoan
-from books.serializers import BookLoanSerializer
 
 
 class UserView(generics.CreateAPIView):
@@ -21,12 +19,15 @@ class UserListView(generics.ListAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsColaborator or IsSuperuser]
+    permission_classes = [IsColaborator | IsSuperuser]
 
 
 class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAccountOwner or IsSuperuser]
+    permission_classes = [IsAccountOwner | IsSuperuser]
     lookup_url_kwarg = "user_id"
+
+    def perform_update(self, serializer):
+        serializer.save(is_admin=self.request.user.is_superuser)

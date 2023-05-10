@@ -30,12 +30,16 @@ PASSWORD = "password"
 IS_SUPERUSER = "is_superuser"
 IS_COLABORATOR = "is_colaborator"
 IS_STUDENT = "is_student"
-IS_ACTIVE = "is_active"
+IS_SUSPENDED = "is_suspended"
 VALIDATORS = "validators"
 URLS = "urls"
 COPIES_COUNT = "copies_count"
 LOAD_DATE = "load_date"
 DAYS = "days"
+JSON_FILE = "json_file"
+IS_AVALIABLE = "is_avaliable"
+BOOK_FOLLOWING = "BookFollowing"
+RETURNED="returned"
 
 
 def way(arg1: str, arg2: str) -> str:
@@ -43,4 +47,4 @@ def way(arg1: str, arg2: str) -> str:
 
 
 def repr_default(cls: str, pk: int, field: any) -> str:
-    return f"<{cls.capitalize()}: {field.capitalize()} [{pk}]>"
+    return f"<{cls}: {field} [{pk}]>"
