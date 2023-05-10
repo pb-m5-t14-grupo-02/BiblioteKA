@@ -21,7 +21,6 @@ from django_rest_passwordreset.views import reset_password_request_token
 from drf_spectacular.views import (
     SpectacularSwaggerView,
     SpectacularAPIView,
-    SpectacularRedocView,
 )
 
 urlpatterns = [

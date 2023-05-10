@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 from books.models import Book
 from authors.models import Author
-from core.constrains import IMAGE, JSON_FILE, ABOUT, BOOKS
+from core.constrains import IMAGE, ABOUT, BOOKS
 import json
 
 

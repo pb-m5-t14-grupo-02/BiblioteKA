@@ -12,7 +12,6 @@ from core.constrains import (
     way,
     repr_default,
 )
-import datetime
 
 
 class LoanDays(models.IntegerChoices):

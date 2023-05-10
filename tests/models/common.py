@@ -6,7 +6,6 @@ from core.constrains import (
 )
 
 
-
 def create_user_data(
         username=grs(5),
         email=grs(5),

@@ -7,13 +7,12 @@ from users.permissions import (
     IsColaborator,
     IsSuperuser,
     IsAccountOwner,
-    IsStudent,
     ReadOnly,
 )
 from .permissions import IsMyOwnAccountSuspended, IsStudentSuspended
 from users.models import User
 from django.shortcuts import get_object_or_404, get_list_or_404
-from datetime import timedelta, datetime
+from datetime import timedelta
 from django.utils import timezone
 from authors.models import Author
 from rest_framework.views import Response, status

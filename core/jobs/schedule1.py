@@ -3,7 +3,6 @@ from django.utils import timezone
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.interval import IntervalTrigger
 from django_apscheduler.jobstores import DjangoJobStore
-from django_apscheduler.models import DjangoJobExecution
 from books.models import BookLoan
 from users.models import User
 

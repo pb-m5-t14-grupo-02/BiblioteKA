@@ -3,8 +3,6 @@ from rest_framework import generics
 from .models import User
 from .serializers import UserSerializer
 from .permissions import IsAccountOwner, IsColaborator, IsSuperuser
-from books.models import BookLoan
-from books.serializers import BookLoanSerializer
 
 
 class UserView(generics.CreateAPIView):
