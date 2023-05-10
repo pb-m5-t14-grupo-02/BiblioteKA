@@ -6,7 +6,6 @@ from core.constrains import (
 )
 
 
-
 def create_user_data(
         username=grs(5),
         email=grs(5),
@@ -43,7 +42,6 @@ def create_author_data(
 options_loan_days = [7, 15, 30]
 def create_book_data(
         author=None,
-        author_id=1,
         name=grs(5),
         series=grs(5),
         genre=grs(5),
@@ -54,7 +52,7 @@ def create_book_data(
         image="https://bit.ly/3McVSuJ",
         asin=grs(10)
 ) -> dict:
-    book = {
+    return {
         NAME: name,
         SERIES: series,
         GENRE: genre,
@@ -63,10 +61,7 @@ def create_book_data(
         DAYS: days,
         ISBN: isbn,
         ASIN: asin,
-        IMAGE: image
+        IMAGE: image,
+        AUTHOR.lower(): author
     }
-    if author:
-        book[AUTHOR.lower()] = author
-    else:
-        book["author_id"] = author_id
-    return book
+

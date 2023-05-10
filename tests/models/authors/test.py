@@ -21,7 +21,7 @@ class TestModelAuthor(TestCase):
         for field in fields:
             result = getattr(self.author_instance, field)
             expected = self.author_data[field]
-            msg = f'Checking if {field} is the same'
+            msg = f"Checking if {field} is the same"
             self.assertEqual(result, expected, msg)
 
     def test_fields_max_length(self):

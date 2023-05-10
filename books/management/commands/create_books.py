@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 from books.models import Book
 from authors.models import Author
-from core.constrains import IMAGE, JSON_FILE, ABOUT, BOOKS
+from core.constrains import IMAGE, ABOUT, BOOKS
 import json
 
 
@@ -19,10 +19,10 @@ class Command(BaseCommand):
         list_authors = read("books/management/author_A.json")
         for author in list_authors:
             curr_author = Author(name=author["author"], about=author[ABOUT])
-            if author["image"]:
+            if author[IMAGE]:
                 curr_author.image = author[IMAGE]
             curr_author.save()
             if len(author[BOOKS]):
                 for book in author[BOOKS]:
                     Book.objects.create(**book, author=curr_author)
-        print("\033[32mFinish create books and authors ;)")
+        print("\033[32mFinish create books and authors ≧◠‿◠≦")

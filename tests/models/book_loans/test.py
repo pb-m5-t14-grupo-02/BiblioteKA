@@ -2,7 +2,7 @@ from django.test import TestCase
 from books.models import Book, Copy
 from authors.models import Author
 from django.core.exceptions import ValidationError
-from core.constrains import USER, COPY, IS_AVALIABLE
+from core.constrains import IS_AVALIABLE
 from tests.models.common import create_author_data, create_book_data
 from random import random
 

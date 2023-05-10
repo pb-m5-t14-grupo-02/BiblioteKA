@@ -10,7 +10,7 @@ class User(AbstractUser):
     is_colaborator = models.BooleanField(default=False)
     is_suspended = models.BooleanField(default=False)
     is_superuser = models.BooleanField(null=True, default=False)
-    image = models.FileField(upload_to='users', default=get_random_avatar)
+    image = models.FileField(upload_to="users", default=get_random_avatar)
     
 
     book_loan = models.ManyToManyField(

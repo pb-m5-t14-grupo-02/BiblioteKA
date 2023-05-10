@@ -8,10 +8,10 @@ from core.constrains import (
     BOOK,
     BOOKS,
     BOOK_LOAN,
+    BOOK_FOLLOWING,
     way,
     repr_default,
 )
-import datetime
 
 
 class LoanDays(models.IntegerChoices):
@@ -29,7 +29,10 @@ class BookFollowing(models.Model):
         way(BOOKS, BOOK),
         on_delete=models.CASCADE,
     )
-    
+
+    def __repr__(self) -> str:
+        return repr_default(BOOK_FOLLOWING, self.pk, f"book ({self.book.name}) -> user ({self.user.username})")
+
 
 class Book(models.Model):
     image = models.FileField(

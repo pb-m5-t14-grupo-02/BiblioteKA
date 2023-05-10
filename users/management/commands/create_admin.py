@@ -6,7 +6,7 @@ import os
 
 
 class Command(BaseCommand):
-    help = 'Create admin user'
+    help = "Create admin user"
 
     def handle(self, *args, **options):
         dotenv.load_dotenv()
@@ -15,4 +15,4 @@ class Command(BaseCommand):
             password=os.getenv("ADMIN_PASSWORD"),
             email=os.getenv("ADMIN_EMAIL") or f"invalid_{grs(4)}@mail.com"
         )
-        print("\033[36mAdmin user created!")
+        print("\033[36mAdmin user created ʕ•́ᴥ•̀ʔ!")

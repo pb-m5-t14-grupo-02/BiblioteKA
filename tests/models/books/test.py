@@ -38,7 +38,7 @@ class TestModelBook(TestCase):
         for field in fields:
             result = getattr(self.book_instance, field)
             expected = self.book_data[field]
-            msg = f'Checking if {field} is the same'
+            msg = f"Checking if {field} is the same"
             self.assertEqual(result, expected, msg)
 
     def test_verify_types_fields(self):
@@ -114,5 +114,10 @@ class TestModelBook(TestCase):
             self.assertIn(copy, self.book_2.copies.all())
             self.assertIs(self.book_2, copy.book)
 
-    def test_if_BookFollowing_is_working(self):
-        pass
+    def test_if_BookFollowing_cannot_have_more_than_one_book(self):
+        """Test if the raises an error when try to put more than one book for the model"""
+        author_3 = Author.objects.create(**create_author_data())
+        book_3 = Book.objects.create(**create_book_data(author=author_3))
+        with self.assertRaises(ValueError):
+            self.book_2_follow.book = [book_3, self.book_instance]
+            self.book_2_follow.save()

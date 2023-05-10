@@ -37,12 +37,14 @@ COPIES_COUNT = "copies_count"
 LOAD_DATE = "load_date"
 DAYS = "days"
 JSON_FILE = "json_file"
-IS_AVALIABLE="is_avaliable"
+IS_AVALIABLE = "is_avaliable"
+BOOK_FOLLOWING = "BookFollowing"
 RETURNED="returned"
+
 
 def way(arg1: str, arg2: str) -> str:
     return arg1 + "." + arg2
 
 
 def repr_default(cls: str, pk: int, field: any) -> str:
-    return f"<{cls.capitalize()}: {field} [{pk}]>"
+    return f"<{cls}: {field} [{pk}]>"
