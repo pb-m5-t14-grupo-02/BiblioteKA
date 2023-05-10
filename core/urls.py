@@ -18,10 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 from .constrains import way, URLS, USERS, AUTHORS, BOOKS
 from django_rest_passwordreset.views import reset_password_request_token
-from drf_spectacular.views import (
-    SpectacularSwaggerView,
-    SpectacularAPIView,
-)
+
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -33,6 +30,4 @@ urlpatterns = [
         "api/password_reset/",
         include("django_rest_passwordreset.urls", namespace="password_reset"),
     ),
-    path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
-    path("api/docs/", SpectacularSwaggerView.as_view(url_name="schema")),
 ]
