@@ -30,8 +30,14 @@ PASSWORD = "password"
 IS_SUPERUSER = "is_superuser"
 IS_COLABORATOR = "is_colaborator"
 IS_STUDENT = "is_student"
+IS_SUSPENDED = "is_suspended"
+IS_ACTIVE = "is_active"
 VALIDATORS = "validators"
 URLS = "urls"
+COPIES_COUNT = "copies_count"
+LOAD_DATE = "load_date"
+DAYS = "days"
+
 
 
 def way(arg1: str, arg2: str) -> str:
