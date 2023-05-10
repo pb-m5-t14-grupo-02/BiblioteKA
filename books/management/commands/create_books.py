@@ -17,7 +17,7 @@ class Command(BaseCommand):
         list_authors = read("books/management/author_A.json")
         for author in list_authors:
             curr_author = Author(name=author["author"], about=author[ABOUT])
-            if author["image"]:
+            if author[IMAGE]:
                 curr_author.image = author[IMAGE]
             curr_author.save()
             if len(author[BOOKS]):
