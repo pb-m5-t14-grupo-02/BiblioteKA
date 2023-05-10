@@ -51,6 +51,7 @@ DJANGO_APPS = [
 THIRD_PARTY_APPS = [
     "rest_framework",
     "django_rest_passwordreset",
+    'corsheaders',
     "cloudinary",
     "cloudinary_storage",
     "drf_spectacular",
@@ -61,6 +62,7 @@ MY_APPS = [AUTHORS, BOOKS, USERS]
 INSTALLED_APPS = THIRD_PARTY_APPS + MY_APPS + DJANGO_APPS
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -226,3 +228,8 @@ def verify_curr_branch():
 
 if verify_curr_branch():
     TEST_RUNNER = "redgreenunittest.django.runner.RedGreenDiscoverRunner"
+
+
+CORS_ALLOWED_ORIGINS = [
+	'http://localhost:3000'
+]
