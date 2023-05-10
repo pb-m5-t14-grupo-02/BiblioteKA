@@ -73,7 +73,7 @@ class BookFollowingSerializer(serializers.ModelSerializer):
 
 
 class BookLoanSerializer(serializers.ModelSerializer):
-    user = UserSerializerMinimum()
+    user = UserSerializerMinimum(required=False)
 
     def create(self, validated_data):
         days = validated_data.pop(DAYS)

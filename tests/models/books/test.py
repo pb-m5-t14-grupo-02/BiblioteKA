@@ -6,7 +6,6 @@ from books.models import Book, Copy
 from core.constrains import NAME, SERIES, GENRE, ABOUT, YEAR, DAYS, ISBN, ASIN, IMAGE
 from tests.models.common import create_author_data, create_book_data
 
-# TODO: Faltou o is_suspended
 
 class TestModelBook(TestCase):
     @classmethod

@@ -27,6 +27,12 @@ class UserSerializer(serializers.ModelSerializer):
         return User.objects.create_user(**validated_data)
 
     def update(self, instance: User, validated_data: dict) -> User:
+        is_admin = validated_data.pop("is_admin")
+        if not is_admin:
+            forbidden_keys_to_student_update = (IS_SUSPENDED, IS_STUDENT, IS_SUPERUSER, IS_COLABORATOR)
+            for key in forbidden_keys_to_student_update:
+                if key in validated_data.keys():
+                    validated_data.pop(key)
         if validated_data.get(PASSWORD, None):
             password = validated_data.pop(PASSWORD)
             instance.set_password(password)
@@ -51,7 +57,7 @@ class UserSerializer(serializers.ModelSerializer):
             IS_SUPERUSER,
             IS_SUSPENDED,
         ]
-        read_only_fields = [IS_SUSPENDED] # TODO: Talvez precisa trocar
+
         extra_kwargs = {
             PASSWORD: WRITE_ONLY,
             EMAIL: {VALIDATORS: [UniqueValidator(queryset=User.objects.all())]},
