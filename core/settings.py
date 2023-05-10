@@ -54,12 +54,41 @@ THIRD_PARTY_APPS = [
     'corsheaders',
     "cloudinary",
     "cloudinary_storage",
+    "django_apscheduler",
     "drf_spectacular",
 ]
 
 MY_APPS = [AUTHORS, BOOKS, USERS]
 
 INSTALLED_APPS = THIRD_PARTY_APPS + MY_APPS + DJANGO_APPS
+
+SCHEDULER_AUTOSTART = True
+SCHEDULER_RUN_AT_STARTUP = True
+SCHEDULER_SETTINGS = {
+    "apscheduler.executors.default": {
+        "class": "apscheduler.executors.pool:ThreadPoolExecutor",
+        "max_workers": "20",
+    },
+    "apscheduler.jobstores.default": {
+        "class": "apscheduler.jobstores.django:DjangoJobStore"
+    },
+}
+
+# APSCHEDULER_JOBSTORES = {
+#     "default": {
+#         "TYPE": "django_apscheduler.jobstores:DjangoJobStore"
+#     }
+# }
+# APSCHEDULER_EXECUTORS = {
+#     "default": {
+#         "CLASS": "apscheduler.executors.pool:ThreadPoolExecutor",
+#         "MAX_WORKERS": 20,
+#     },
+# }
+# APSCHEDULER_JOB_DEFAULTS = {
+#     "coalesce": False,
+#     "max_instances": 3,
+# }
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',

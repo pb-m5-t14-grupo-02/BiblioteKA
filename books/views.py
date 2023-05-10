@@ -10,6 +10,8 @@ from django.shortcuts import get_object_or_404, get_list_or_404
 from datetime import timedelta, datetime
 from django.utils import timezone
 from authors.models import Author
+from core.jobs.tarefa1 import scheduler
+import ipdb
 from rest_framework.views import Response, status
 
 
