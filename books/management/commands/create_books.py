@@ -4,12 +4,14 @@ from authors.models import Author
 from core.constrains import IMAGE, JSON_FILE, ABOUT, BOOKS
 import json
 
-def read(filepath: str): 
+
+def read(filepath: str):
     with open(filepath, "r", encoding="utf-8") as json_file:
         loaded_data = json.load(json_file)
-        
+
     return loaded_data
-from ipdb import set_trace
+
+
 class Command(BaseCommand):
     help = "Create multiple books and authors from an array"
 
