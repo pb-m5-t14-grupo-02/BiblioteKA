@@ -74,22 +74,6 @@ SCHEDULER_SETTINGS = {
     },
 }
 
-# APSCHEDULER_JOBSTORES = {
-#     "default": {
-#         "TYPE": "django_apscheduler.jobstores:DjangoJobStore"
-#     }
-# }
-# APSCHEDULER_EXECUTORS = {
-#     "default": {
-#         "CLASS": "apscheduler.executors.pool:ThreadPoolExecutor",
-#         "MAX_WORKERS": 20,
-#     },
-# }
-# APSCHEDULER_JOB_DEFAULTS = {
-#     "coalesce": False,
-#     "max_instances": 3,
-# }
-
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     "django.middleware.security.SecurityMiddleware",
