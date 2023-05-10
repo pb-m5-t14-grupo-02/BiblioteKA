@@ -203,7 +203,7 @@ EMAIL_PORT = os.getenv("EMAIL_PORT")
 EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 
-# TODO passar pra env
+# TODO passar pra env, provavelmente vai dar pau no deploy
 PASSWORD_RESET_CONFIRM_URL = "http://127.0.0.1:8000/api/reset/confirm/"
 EMAIL_FROM_USER = "BiblioteKA <projeto.biblioteka@gmail.com>"
 EMAIL_SUBJECT_RESET = "Redefinição de senha"

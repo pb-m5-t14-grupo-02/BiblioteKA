@@ -34,6 +34,7 @@ class BookFollowing(models.Model):
 class Book(models.Model):
     image = models.FileField(
         upload_to="books",
+        max_length=1000,
         default="https://res.cloudinary.com/dnxhcbb0u/image/upload/v1683571699/defaults/book/book_kzgg3h.png",
     )
     name = models.CharField(max_length=120)
@@ -68,6 +69,7 @@ class BookLoan(models.Model):
     )
     returned = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
+    # TODO tentar remover is active
 
     def __repr__(self) -> str:
         return repr_default(
