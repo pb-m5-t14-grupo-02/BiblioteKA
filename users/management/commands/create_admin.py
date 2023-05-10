@@ -6,7 +6,7 @@ import os
 
 
 class Command(BaseCommand):
-    help = 'Create admin user'
+    help = "Create admin user"
 
     def handle(self, *args, **options):
         dotenv.load_dotenv()

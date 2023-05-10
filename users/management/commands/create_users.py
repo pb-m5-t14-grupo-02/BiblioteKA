@@ -5,7 +5,7 @@ from names import get_first_name
 from random import choice
 
 class Command(BaseCommand):
-    help = 'Create users'
+    help = "Create users"
 
     def add_arguments(self, parser):
         parser.add_argument(

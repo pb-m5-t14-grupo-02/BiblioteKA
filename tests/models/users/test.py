@@ -110,16 +110,16 @@ class TestModelUser(TestCase):
         for field in fields:
             result = getattr(instance, field)
             expected = data[field]
-            msg = f'Checking if {field} is the same'
+            msg = f"Checking if {field} is the same"
             self.assertEqual(result, expected, msg)
 
         result = instance.password
         expected = data[PASSWORD]
-        msg = 'Checking if password is hashed'
+        msg = "Checking if password is hashed"
         self.assertNotEqual(result, expected, msg)
 
         result = instance.check_password(data[PASSWORD])
-        msg = 'Checking if the password is hashed correctly'
+        msg = "Checking if the password is hashed correctly"
         self.assertTrue(result, msg)
 
 

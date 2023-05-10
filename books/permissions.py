@@ -14,5 +14,5 @@ class IsStudentSuspended(permissions.BasePermission):
     message = "This student is suspended, then he can't loan any books"
 
     def has_permission(self, request, view):
-        user = get_object_or_404(User, id=request.parser_context['kwargs']['student_id'])
+        user = get_object_or_404(User, id=request.parser_context["kwargs"]["student_id"])
         return not user.is_suspended
