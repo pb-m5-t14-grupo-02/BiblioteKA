@@ -52,7 +52,8 @@ THIRD_PARTY_APPS = [
     "rest_framework",
     "django_rest_passwordreset",
     "cloudinary",
-    "cloudinary_storage"
+    "cloudinary_storage",
+    "drf_spectacular",
 ]
 
 MY_APPS = [AUTHORS, BOOKS, USERS]
@@ -110,11 +111,12 @@ DATABASES = {
 DATABASE_URL = os.getenv("DATABASE_URL")
 if DATABASE_URL:
     db_from_env = dj_database_url.config(
-        default=DATABASE_URL, conn_max_age=500, ssl_require=True)
+        default=DATABASE_URL, conn_max_age=500, ssl_require=True
+    )
     DATABASES["default"].update(db_from_env)
     DEBUG = False
 
-    
+
 if not DEBUG:
     # Tell Django to copy statics to the `staticfiles` directory
     # in your application directory on Render.
@@ -172,13 +174,20 @@ REST_FRAMEWORK = {
     ),
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "PAGE_SIZE": 5,
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
+
+# SPECTACULAR_SETTINGS = {
+#     "TITLE": "BiblioteKA",
+#     "DESCRIPTION": "Api desenvolvida para o gerenciamento de bibliotecas",
+#     "VERSION": "1.0.0",
+#     "SERVE_INCLUDE_SCHEMA": False,
+# }
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(days=7),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=14),
 }
-
 
 
 AUTH_USER_MODEL = way(USERS, USER)
@@ -199,18 +208,19 @@ EMAIL_SUBJECT_RESET = "Redefinição de senha"
 
 
 CLOUDINARY_STORAGE = {
-  "CLOUD_NAME" : os.getenv("CLOUDINARY_CLOUD_NAME"),
-  "API_KEY" : os.getenv("CLOUDINARY_API_KEY"), 
-  "API_SECRET" : os.getenv("CLOUDINARY_API_SECRET")
-} 
+    "CLOUD_NAME": os.getenv("CLOUDINARY_CLOUD_NAME"),
+    "API_KEY": os.getenv("CLOUDINARY_API_KEY"),
+    "API_SECRET": os.getenv("CLOUDINARY_API_SECRET"),
+}
 
 DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
 
 
 def verify_curr_branch():
     import subprocess
+
     result = subprocess.run(["git", "branch", "--show-current"], stdout=subprocess.PIPE)
-    output = result.stdout.decode('utf-8')
+    output = result.stdout.decode("utf-8")
     return "main" not in output
 
 
