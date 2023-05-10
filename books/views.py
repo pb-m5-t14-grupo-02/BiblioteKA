@@ -55,17 +55,14 @@ class BookFollowingView(generics.ListCreateAPIView):
         return BookFollowing.objects.filter(user=self.request.user)
 
 
-class BookStudentLoanView(generics.CreateAPIView):
+class BookColaboratorSelfLoanView(generics.CreateAPIView):
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsStudent, IsMyOwnAccountSuspended]
-
+    permission_classes = [IsColaborator | IsSuperuser, IsMyOwnAccountSuspended]
     queryset = BookLoan.objects.all()
     serializer_class = BookLoanSerializer
     lookup_url_kwarg = "book_id"
 
     def perform_create(self, serializer):
-        from ipdb import set_trace
-        set_trace()
         book = get_object_or_404(Book, id=self.kwargs["book_id"])
         copy = get_list_or_404(Copy, book=book, is_avaliable=True)[0]
         copy.is_avaliable = False
@@ -130,7 +127,6 @@ class UserBooksLoan(generics.ListAPIView):
         queryset = self.get_queryset()
         now = timezone.now()
         for book_loan in queryset:
-            # ipdb.set_trace()
             if not book_loan.returned and book_loan.return_date < now.date():
                 # Bloqueando o usuário que está com empréstimo atrasado
                 user = book_loan.user

@@ -2,7 +2,7 @@ from django.test import TestCase
 from authors.models import Author
 from django.db.models.fields.files import FieldFile
 from django.utils.crypto import get_random_string as grs
-from books.models import Book, Copy
+from books.models import Book, Copy, BookFollowing
 from core.constrains import NAME, SERIES, GENRE, ABOUT, YEAR, DAYS, ISBN, ASIN, IMAGE
 from tests.models.common import create_author_data, create_book_data
 
@@ -110,3 +110,6 @@ class TestModelBook(TestCase):
         for copy in copies:
             self.assertIn(copy, self.book_2.copies.all())
             self.assertIs(self.book_2, copy.book)
+
+    def test_if_BookFollowing_is_working(self):
+        
