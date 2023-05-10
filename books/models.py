@@ -8,6 +8,7 @@ from core.constrains import (
     BOOK,
     BOOKS,
     BOOK_LOAN,
+    BOOK_FOLLOWING,
     way,
     repr_default,
 )
@@ -29,7 +30,10 @@ class BookFollowing(models.Model):
         way(BOOKS, BOOK),
         on_delete=models.CASCADE,
     )
-    
+
+    def __repr__(self) -> str:
+        return repr_default(BOOK_FOLLOWING, self.pk, f"book ({self.book.name}) -> user ({self.user.username})")
+
 
 class Book(models.Model):
     image = models.FileField(
@@ -64,9 +68,7 @@ class BookLoan(models.Model):
         on_delete=models.CASCADE,
     )
     load_date = models.DateField(auto_now_add=True)
-    return_date = models.DateField(
-        # default=datetime.datetime.now().date() + datetime.timedelta(days=LoanDays.week)
-    )
+    return_date = models.DateField()
     returned = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     # TODO tentar remover is active

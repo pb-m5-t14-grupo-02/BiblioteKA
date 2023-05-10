@@ -76,10 +76,9 @@ class BookLoanSerializer(serializers.ModelSerializer):
     user = UserSerializerMinimum(required=False)
 
     def create(self, validated_data):
+        # TODO: precisa disso?
         days = validated_data.pop(DAYS)
         due_date = validated_data.pop("due_date")
-        initial_date = datetime.datetime.now()
-        end_date = initial_date + datetime.timedelta(days=days)
         validated_data["return_date"] = due_date
         return BookLoan.objects.create(**validated_data)
 

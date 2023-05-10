@@ -121,5 +121,3 @@ class TestModelBook(TestCase):
         with self.assertRaises(ValueError):
             self.book_2_follow.book = [book_3, self.book_instance]
             self.book_2_follow.save()
-
-
