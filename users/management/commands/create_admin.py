@@ -14,7 +14,7 @@ class Command(BaseCommand):
         email = os.getenv("ADMIN_EMAIL")
         found_username = User.objects.filter(username=username)
         found_email = User.objects.filter(email=email)
-        if found_username.count() > 0 or found_email.count() > 0:
+        if found_username.count() == 0 or found_email.count() == 0:
             User.objects.create_superuser(
                 username=os.getenv("ADMIN_USERNAME"),
                 password=os.getenv("ADMIN_PASSWORD"),
